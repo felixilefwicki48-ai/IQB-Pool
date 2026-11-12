@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>IQB-Abituraufgaben Mathematik 2025 – Inhalte im Überblick</title>
+<title>IQB-Abituraufgaben Mathematik – Inhalte im Überblick</title>
 <style>
   :root {
     --bg: #f2f5f9;
@@ -166,6 +166,8 @@
   .ed-go { padding: 6px 12px; border: 1px solid var(--ink); background: var(--ink); color: var(--bg); border-radius: 6px; cursor: pointer; }
   .ed-btn:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
   .ed-hint { margin: 8px 0 0; font-size: .84rem; color: var(--muted); }
+  .notice { margin: 0 0 16px; padding: 10px 12px; border: 1px solid var(--sto); background: var(--sto-bg); border-radius: 8px; font-size: .9rem; }
+  .sel { padding: 5px 8px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); color: inherit; font: inherit; min-height: 34px; }
   .empty { padding: 28px; text-align: center; color: var(--muted); background: var(--surface); border: 1px dashed var(--line); border-radius: 8px; }
 
   .topic { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px; }
@@ -182,11 +184,17 @@
 </head>
 <body>
 <div class="wrap">
-  <h1>IQB-Abituraufgaben Mathematik 2025</h1>
-  <p class="lead">Welche Inhalte kommen in welcher Aufgabe vor? Filtern Sie nach Prüfungsteil, Niveau, Sachgebiet, Thema und nach den Verfahren und Formeln, die in den Lösungen vorkommen, zum Beispiel dem Skalarprodukt.</p>
+  <h1>IQB-Abituraufgaben Mathematik</h1>
+  <p class="lead">Welche Inhalte kommen in welcher Aufgabe vor? Filtern Sie nach Jahr, Prüfungsteil, Niveau, Sachgebiet, Thema und nach den Verfahren und Formeln, die in den Lösungen vorkommen, zum Beispiel dem Skalarprodukt.</p>
+
+  <div class="notice" id="notice" role="status" hidden></div>
 
   <section class="panel" aria-label="Filter">
     <div class="row">
+      <div class="group">
+        <div class="gl">Jahr</div>
+        <div class="seg" id="f-jahr"></div>
+      </div>
       <div class="group">
         <div class="gl">Prüfungsteil</div>
         <div class="seg" id="f-teil"></div>
@@ -217,13 +225,13 @@
 
   <details class="panel" id="own">
     <summary>Eigene Anpassungen <span class="count" id="own-count"></span></summary>
-    <p class="own-help">Bei jeder Aufgabe können Sie über „Zuordnung ändern“ Themen und Verfahren hinzufügen oder entfernen und neue Verfahren mit einer Kurzformel anlegen. Gestrichelt umrandet sind Zuordnungen, die Sie selbst ergänzt haben. Ihre Änderungen werden in diesem Browser gespeichert. Um sie zu sichern oder auf anderen Geräten zu nutzen, exportieren Sie die Datei anpassungen.json und legen Sie sie neben die index.html in Ihr Repository. Die Seite lädt sie dort automatisch, solange in diesem Browser keine eigenen Änderungen gespeichert sind.</p>
+    <p class="own-help">Bei jeder Aufgabe können Sie über „Zuordnung ändern“ Themen und Verfahren hinzufügen oder entfernen und neue Verfahren mit Kurzformel anlegen. Gestrichelt umrandet sind Ihre Ergänzungen. Änderungen werden zunächst nur in diesem Browser gespeichert. Um sie dauerhaft zu machen, exportieren Sie die Jahresdatei (und bei neuen oder geänderten Formeln die formeln.json), ersetzen Sie die Dateien im Repository und verwerfen Sie danach die lokalen Änderungen.</p>
     <div class="seg">
-      <button class="chip" id="exp" type="button">Exportieren</button>
-      <button class="chip" id="impb" type="button">Importieren</button>
-      <button class="chip" id="clr" type="button">Änderungen in diesem Browser verwerfen</button>
+      <select class="sel" id="exp-year" aria-label="Jahr für den Export"></select>
+      <button class="chip" id="exp-d" type="button">Jahresdatei exportieren</button>
+      <button class="chip" id="exp-f" type="button">formeln.json exportieren</button>
+      <button class="chip" id="clr" type="button">Lokale Änderungen verwerfen</button>
     </div>
-    <input type="file" id="imp" accept=".json,application/json" hidden>
   </details>
   <datalist id="dl-tags"></datalist>
   <datalist id="dl-v"></datalist>
@@ -240,180 +248,80 @@
   <main id="out"></main>
 
   <footer>
-    Grundlage sind die Aufgaben und Erwartungshorizonte aus dem Abituraufgabenpool der Länder (Pool 2025, IQB). Die Zuordnung der Themen ist eine eigene Einordnung und kann von der offiziellen Beschreibung abweichen. Teil&nbsp;B ist für die Bearbeitung mit digitalem Hilfsmittel vorgesehen (MMS). Die Verfahren sind den Lösungswegen im Erwartungshorizont entnommen; andere zulässige Lösungswege können weitere Verfahren nutzen.
+    Grundlage sind die Aufgaben und Erwartungshorizonte aus dem Abituraufgabenpool der Länder (IQB). Die Zuordnung der Themen ist eine eigene Einordnung und kann von der offiziellen Beschreibung abweichen. Teil&nbsp;B ist für die Bearbeitung mit digitalem Hilfsmittel vorgesehen (MMS). Die Verfahren sind den Lösungswegen im Erwartungshorizont entnommen; andere zulässige Lösungswege können weitere Verfahren nutzen.
   </footer>
 </div>
 
 <script>
-/* Datensatz: [Teil, Niveau, Gebiet, Nr, BE, Beschreibung, [Themen]] */
-const D = [
-// Teil A, Analysis, Gk
-["A","Gk","Ana","1.1",5,"Tangentengleichung rechnerisch bestimmen; zweite, parallele Tangente skizzieren.",["Tangente und Ableitung","Ganzrationale Funktionen"]],
-["A","Gk","Ana","1.2",5,"Stammfunktion durch einen Punkt; Integral über symmetrisches Intervall ohne Rechnung begründen.",["Stammfunktion","Integral und Fläche","Symmetrie","Ganzrationale Funktionen"]],
-["A","Gk","Ana","1.3",5,"Nullstelle einer Exponentialfunktion nachweisen; Flächeninhalt mit den Koordinatenachsen.",["Nullstellen","Integral und Fläche","e-Funktion"]],
-["A","Gk","Ana","2.1",5,"Graph in y-Richtung verschieben; Verschiebung so wählen, dass ein Quadrat flächengleich geteilt wird.",["Graphen verschieben","Integral und Fläche","Ganzrationale Funktionen"]],
-["A","Gk","Ana","2.2",5,"Ableitung angeben; Gleichung lösen und geometrisch deuten (Tangente durch den Ursprung).",["Tangente und Ableitung","Ganzrationale Funktionen"]],
-// Teil A, Analysis, Lk
-["A","Lk","Ana","1.1",5,"Funktionsschar mit e-Funktion: gleiche Steigung im Ursprung, Punktsymmetrie.",["Funktionsscharen","Tangente und Ableitung","Symmetrie","e-Funktion"]],
-["A","Lk","Ana","1.2",5,"Extremstelle zeigen; Graph einer Stammfunktion zuordnen und begründen.",["Extremstellen","Wendestellen","Stammfunktion","Ganzrationale Funktionen"]],
-["A","Lk","Ana","1.3",5,"Integral einer Kosinusfunktion; Parameter a und b aus zwei Punkten bestimmen.",["Trigonometrische Funktionen","Integral und Fläche","Funktionsterm bestimmen"]],
-["A","Lk","Ana","2.1",5,"Produkt f(x)·e^x: Bedingung für waagerechte Tangente nachweisen und am Graphen prüfen.",["Tangente und Ableitung","e-Funktion","Argumentieren am Graphen"]],
-["A","Lk","Ana","2.2",5,"Umkehrfunktion: Aussage über Flächeninhalte zwischen Graph, Umkehrgraph und Winkelhalbierender beurteilen.",["Umkehrfunktion","Integral und Fläche","Argumentieren am Graphen"]],
-["A","Lk","Ana","2.3",5,"Wurzelfunktion: Tangente einzeichnen; Steigungen aller Geraden durch P mit zweitem Schnittpunkt.",["Tangente und Ableitung","Wurzelfunktion","Argumentieren am Graphen"]],
-// Teil A, Geometrie, Gk
-["A","Gk","Geo","1.1",5,"Punkt liegt nicht auf Gerade; Punkt auf der Geraden angeben; Orthogonalität zweier Geraden.",["Geraden","Orthogonalität"]],
-["A","Gk","Geo","1.2",5,"Lage zweier Punkte zur xy-Ebene; Flächeninhalt eines gleichschenkligen Dreiecks.",["Lage im Koordinatensystem","Flächen und Volumen","Länge und Abstand"]],
-["A","Gk","Geo","1.3",5,"Spiegelung eines Punktes an einem Punkt; Punkt in Ebene, Normalenvektor nachweisen.",["Spiegelung","Ebenen","Normalenvektor"]],
-["A","Gk","Geo","2.1",5,"Lineares Gleichungssystem: Lösung nachweisen; ergänzte Gleichung, unendlich viele Lösungen beurteilen. (Inhaltlich identisch mit Gk 2.3.)",["Lineare Gleichungssysteme"]],
-["A","Gk","Geo","2.2",5,"Ebene in Parameterform: Vektor steht senkrecht zur Ebene; Punkt mit vorgegebenem Abstand zum Spiegelpunkt.",["Ebenen","Normalenvektor","Spiegelung","Länge und Abstand"]],
-["A","Gk","Geo","2.3",5,"Lineares Gleichungssystem: Lösung nachweisen; ergänzte Gleichung, unendlich viele Lösungen beurteilen. (Inhaltlich identisch mit Gk 2.1.)",["Lineare Gleichungssysteme"]],
-// Teil A, Geometrie, Lk
-["A","Lk","Geo","1.1",5,"Vektorterme: Vektor, Zahl oder nicht definiert; Werte von r, für die der Winkel mindestens 90° beträgt.",["Skalarprodukt und Winkel","Vektorrechnung"]],
-["A","Lk","Geo","1.2",5,"Würfel: Volumen eines Teilkörpers, Schnittfigur einer Ebene einzeichnen, Schnittgerade zweier Ebenen.",["Körper","Flächen und Volumen","Ebenen","Geraden"]],
-["A","Lk","Geo","2.1",5,"Geradenschar: Ursprung liegt auf keiner Geraden; Aussage, alle Geraden seien identisch, beurteilen.",["Scharen","Geraden"]],
-["A","Lk","Geo","2.2",5,"Ebenenschar: gemeinsam senkrechte Koordinatenebene; zwei verschiedene Ebenen sind nie parallel.",["Scharen","Ebenen","Normalenvektor"]],
-["A","Lk","Geo","2.3",5,"Teil einer Pyramide: Symmetrieebene angeben; Koordinaten eines Eckpunkts über Vektorterm begründen.",["Körper","Lage im Koordinatensystem","Vektorrechnung"]],
-["A","Lk","Geo","2.4",5,"Gleichungssystem mit Parameter: Lösung für a = 0; Parameterwerte für keine bzw. unendlich viele Lösungen.",["Lineare Gleichungssysteme","Scharen"]],
-// Teil A, Stochastik, Gk
-["A","Gk","Stoch","1.1",5,"Onlinespiel: Baumdiagramm erstellen; Ereignis zu einem Term angeben.",["Baumdiagramm","Bedingte Wahrscheinlichkeit","Terme deuten"]],
-["A","Gk","Stoch","1.2",5,"Glücksrad, zweimal gedreht: Term deuten; Wahrscheinlichkeit für ungerade Summe.",["Mehrstufige Zufallsexperimente","Terme deuten"]],
-["A","Gk","Stoch","1.3",5,"Ziehen ohne Zurücklegen (Schwimmgruppe): Wahrscheinlichkeit berechnen; Term deuten.",["Ziehen ohne Zurücklegen","Terme deuten"]],
-["A","Gk","Stoch","2.1",5,"Binomialverteilung mit p = 0,5: Symmetrie der Verteilung nutzen, n ungerade begründen, Wahrscheinlichkeit näherungsweise bestimmen.",["Binomialverteilung","Argumentieren am Graphen"]],
-["A","Gk","Stoch","2.2",5,"Urne ohne Zurücklegen: Wahrscheinlichkeit; Anzahl der Kugeln so bestimmen, dass das Spiel fair ist.",["Ziehen ohne Zurücklegen","Erwartungswert und faires Spiel"]],
-// Teil A, Stochastik, Lk
-["A","Lk","Stoch","1.1",5,"Würfel zweimal geworfen: Gegenwahrscheinlichkeit begründen; Auszahlung für ein faires Spiel.",["Mehrstufige Zufallsexperimente","Erwartungswert und faires Spiel"]],
-["A","Lk","Stoch","1.2",5,"Zwei Binomialverteilungen aus Diagrammen: Aussage beurteilen, Beziehung der Parameter nachweisen.",["Binomialverteilung","Argumentieren am Graphen"]],
-["A","Lk","Stoch","2.1",5,"Binomialverteilung: aus einer Beziehung zwischen P(X=1) und P(X=0) sowie dem Erwartungswert n und p bestimmen.",["Binomialverteilung","Erwartungswert und faires Spiel"]],
-["A","Lk","Stoch","2.2",5,"Würfelprodukt: gleiche Wahrscheinlichkeiten begründen; Term für das Produkt aus n Würfen.",["Mehrstufige Zufallsexperimente","Terme deuten"]],
-["A","Lk","Stoch","2.3",5,"Zwei unabhängige Ereignisse: aus Bedingungen die Wahrscheinlichkeit durch Gleichung bestimmen.",["Stochastische Unabhängigkeit"]],
-// Teil B, Analysis
-["B","Gk","Ana","1",25,"Regenwasser im Auffangbecken (Volumen, Zu- und Abfluss); Wendestelle, Fläche, symmetrisches Trapez in Abhängigkeit von u.",["Änderungsrate und Bestand","Monotonie","Wendestellen","Integral und Fläche","Ganzrationale Funktionen"]],
-["B","Gk","Ana","2",25,"Hotline-Wartezeit mit e-Funktion: Grenzverhalten, Flächenteilung, Extremwerte, mittlere Wartezeit.",["e-Funktion","Grenzverhalten","Wendestellen","Integral und Fläche","Extremstellen","Mittelwert einer Funktion","Änderungsrate und Bestand"]],
-["B","Lk","Ana","1",30,"Funktionsschar mit Nullstellen, Extrempunkt-Abstand, Fläche; Auffangbecken mit Zuflussrate und Pumpe.",["Funktionsscharen","Nullstellen","Extremstellen","Integral und Fläche","Wendestellen","Änderungsrate und Bestand","e-Funktion"]],
-["B","Lk","Ana","2",30,"Schar mit e-Funktion, Wasserrutsche: Grenzverhalten, Extrempunkte, Stammfunktion, Winkel, Wasservolumen, Sichtbarkeit durch Tangenten.",["Funktionsscharen","e-Funktion","Grenzverhalten","Extremstellen","Stammfunktion","Tangente und Ableitung","Integral und Fläche","Monotonie"]],
-// Teil B, Geometrie
-["B","Gk","Geo","1",15,"Partyzelt aus Prisma und Pyramide: Grundfläche, Kantenlängen, Ebene in Koordinatenform, Neigungswinkel, Laserstrahl durch ein Loch.",["Körper","Länge und Abstand","Ebenen","Koordinatenform","Skalarprodukt und Winkel","Geraden"]],
-["B","Gk","Geo","2",15,"Gerades Prisma: Volumen, Ebene in Koordinatenform, Parallelität zu einer Achse, Gerade und Dreieck mit minimalem Flächeninhalt.",["Körper","Flächen und Volumen","Ebenen","Koordinatenform","Geraden","Orthogonalität"]],
-["B","Lk","Geo","1",20,"Pyramide mit Körper über Punktschar: Quadrat prüfen, Volumen, Symmetrieebene, Ebene in Koordinatenform, Winkel maximieren.",["Körper","Flächen und Volumen","Scharen","Ebenen","Koordinatenform","Geraden","Skalarprodukt und Winkel","Lage im Koordinatensystem"]],
-// Teil B, Stochastik
-["B","Gk","Stoch","1",15,"Überbelegte Haushalte: Baumdiagramm, Binomialverteilung mit Erwartungswert und kumulierter Wahrscheinlichkeit, Funktion der bedingten Wahrscheinlichkeit.",["Baumdiagramm","Bedingte Wahrscheinlichkeit","Binomialverteilung","Terme deuten"]],
-["B","Gk","Stoch","2",15,"Brettspiel mit zwei Würfeln: Laplace-Wahrscheinlichkeit, Binomialverteilung, Verteilung skalieren, Kombinatorik der Plättchen.",["Mehrstufige Zufallsexperimente","Binomialverteilung","Kombinatorik","Terme deuten"]],
-["B","Lk","Stoch","1",20,"Naturkostkette: Vierfeldertafel, Binomialverteilung; Normalverteilung mit Bedingungen an Füllmenge und Standardabweichung.",["Vierfeldertafel","Binomialverteilung","Normalverteilung"]],
-["B","Lk","Stoch","2",20,"Naturpark: Binomialverteilung, Baumdiagramm, bedingte Wahrscheinlichkeit, Signifikanztest mit Entscheidungsregel und Fehler zweiter Art.",["Binomialverteilung","Baumdiagramm","Bedingte Wahrscheinlichkeit","Hypothesentest"]],
-["B","Lk","Stoch","3",20,"Naturpark: Binomialverteilung, Baumdiagramm, bedingte Wahrscheinlichkeit, Konfidenzintervall grafisch und rechnerisch.",["Binomialverteilung","Baumdiagramm","Bedingte Wahrscheinlichkeit","Konfidenzintervall"]]
-];
-
 const GEB = { Ana: ["Analysis","ana"], Geo: ["Geometrie","geo"], Stoch: ["Stochastik","sto"] };
 const NIV = { Gk: "grundlegend (Gk)", Lk: "erhöht (Lk)" };
 const TEIL = { A: "Teil A, ohne Hilfsmittel", B: "Teil B, mit Hilfsmittel" };
 
-/* Verfahren und Formeln, die der Erwartungshorizont in der Lösung verwendet. Schlüssel: Teil + Niveau + Gebiet + Nr */
-const V = {
-  "AGkAna1.1": ["Ableitung bilden","Tangentengleichung","Punkte einsetzen"],
-  "AGkAna1.2": ["Stammfunktion bilden","Punkte einsetzen","Symmetrieeigenschaft prüfen","Bestimmtes Integral"],
-  "AGkAna1.3": ["Punkte einsetzen","Stammfunktion bilden","Bestimmtes Integral"],
-  "AGkAna2.1": ["Bestimmtes Integral","Stammfunktion bilden","Gleichung lösen"],
-  "AGkAna2.2": ["Ableitung bilden","Tangentengleichung","Gleichung lösen"],
-  "ALkAna1.1": ["Produkt- und Kettenregel","Ableitung bilden","Symmetrieeigenschaft prüfen"],
-  "ALkAna1.2": ["Ableitung bilden","Bedingung f′(x)=0"],
-  "ALkAna1.3": ["Bestimmtes Integral","Punkte einsetzen","Gleichung lösen"],
-  "ALkAna2.1": ["Produkt- und Kettenregel","Ableitung bilden","Bedingung f′(x)=0"],
-  "ALkAna2.2": ["Bestimmtes Integral","Flächenvergleich durch Spiegelung"],
-  "ALkAna2.3": ["Steigung am Graphen"],
-  "AGkGeo1.1": ["Gleichungssystem lösen","Punktprobe","Skalarprodukt"],
-  "AGkGeo1.2": ["Mittelpunkt bestimmen","Betrag und Länge","Flächeninhalt Dreieck"],
-  "AGkGeo1.3": ["Vektoraddition","Punktprobe","Kollineare Vektoren"],
-  "AGkGeo2.1": ["Punktprobe","Gleichungssystem lösen"],
-  "AGkGeo2.2": ["Skalarprodukt","Betrag und Länge","Vektoraddition"],
-  "AGkGeo2.3": ["Punktprobe","Gleichungssystem lösen"],
-  "ALkGeo1.1": ["Skalarprodukt","Gleichung lösen"],
-  "ALkGeo1.2": ["Volumenformel","Schnittgerade berechnen"],
-  "ALkGeo2.1": ["Punktprobe","Gleichungssystem lösen","Linearkombination"],
-  "ALkGeo2.2": ["Gleichungssystem lösen","Kollineare Vektoren"],
-  "ALkGeo2.3": ["Mittelpunkt bestimmen","Vektoraddition"],
-  "ALkGeo2.4": ["Gleichungssystem lösen","Fallunterscheidung beim Parameter"],
-  "AGkStoch1.1": ["Pfadregel","Summenregel","Gegenwahrscheinlichkeit"],
-  "AGkStoch1.2": ["Pfadregel","Summenregel"],
-  "AGkStoch1.3": ["Pfadregel","Binomialkoeffizient"],
-  "AGkStoch2.1": ["Erwartungswert","Symmetrie der Binomialverteilung"],
-  "AGkStoch2.2": ["Pfadregel","Erwartungswert","Gleichung lösen"],
-  "ALkStoch1.1": ["Pfadregel","Gegenwahrscheinlichkeit","Erwartungswert"],
-  "ALkStoch1.2": ["Erwartungswert"],
-  "ALkStoch2.1": ["Bernoulli-Formel","Erwartungswert","Gleichung lösen"],
-  "ALkStoch2.2": ["Pfadregel","Summenregel"],
-  "ALkStoch2.3": ["Unabhängigkeit","Gleichung lösen"],
-  "BGkAna1": ["Punkte einsetzen","Bestimmtes Integral","Ableitung bilden","Vorzeichen der Faktoren"],
-  "BGkAna2": ["Gleichung lösen","Ableitung bilden","Bestimmtes Integral","Grenzwertbetrachtung"],
-  "BLkAna1": ["Ableitung bilden","Gleichung lösen","Bestimmtes Integral","Betrag und Länge","Vorzeichen der Faktoren"],
-  "BLkAna2": ["Ableitung bilden","Gleichung lösen","Grenzwertbetrachtung","Winkel aus Steigung","Bestimmtes Integral","Tangentengleichung","Vorzeichen der Faktoren"],
-  "BGkGeo1": ["Betrag und Länge","Normalenvektor bestimmen","Skalarprodukt","Koordinatenform aufstellen","Winkel mit Skalarprodukt","Geradengleichung","Punktprobe"],
-  "BGkGeo2": ["Volumenformel","Normalenvektor bestimmen","Skalarprodukt","Koordinatenform aufstellen","Mittelpunkt bestimmen"],
-  "BLkGeo1": ["Betrag und Länge","Volumenformel","Geradengleichung","Normalenvektor bestimmen","Skalarprodukt","Koordinatenform aufstellen","Punktprobe","Mittelpunkt bestimmen"],
-  "BGkStoch1": ["Pfadregel","Summenregel","Bedingte Wahrscheinlichkeit","Erwartungswert","Kumulierte Binomialverteilung","Gleichung lösen"],
-  "BGkStoch2": ["Summenregel","Kumulierte Binomialverteilung","Erwartungswert","Binomialkoeffizient"],
-  "BLkStoch1": ["Summenregel","Kumulierte Binomialverteilung","Normalverteilung","Erwartungswert"],
-  "BLkStoch2": ["Pfadregel","Bedingte Wahrscheinlichkeit","Bernoulli-Formel","Kumulierte Binomialverteilung","Erwartungswert","Hypothesentest"],
-  "BLkStoch3": ["Pfadregel","Bedingte Wahrscheinlichkeit","Kumulierte Binomialverteilung","Erwartungswert","Konfidenzintervall"]
-};
+/* Daten: pro Jahr eine Datei daten-JJJJ.json, dazu formeln.json, jeweils im selben Ordner wie diese Seite */
+const FIRST_YEAR = 2017;
+let FORM0 = {};
+let FORM = {};
+let tasks = [];
+let years = [];
+let loaded = false;
 
-/* Kurzformeln zu den Verfahren */
-const FORM0 = {
-  "Skalarprodukt": "a·b = a₁b₁ + a₂b₂ + a₃b₃;  a·b = 0 ⇔ a und b orthogonal",
-  "Winkel mit Skalarprodukt": "cos φ = (a·b) / (|a|·|b|)",
-  "Betrag und Länge": "|a| = √(a₁² + a₂² + a₃²);  Abstand zweier Punkte = |AB|",
-  "Normalenvektor bestimmen": "n·u = 0 und n·v = 0 für zwei Richtungsvektoren u, v der Ebene",
-  "Koordinatenform aufstellen": "ax₁ + bx₂ + cx₃ = d mit Normalenvektor (a, b, c); d durch Punktprobe",
-  "Geradengleichung": "x = p + t·u (Stützvektor p, Richtungsvektor u)",
-  "Punktprobe": "Koordinaten einsetzen und prüfen, ob die Gleichung stimmt",
-  "Mittelpunkt bestimmen": "M = ½·(A + B)",
-  "Vektoraddition": "Ortsvektor des Zielpunkts = Ortsvektor + Verbindungsvektor",
-  "Kollineare Vektoren": "a = r·b mit einer reellen Zahl r (parallel bzw. Vielfaches)",
-  "Linearkombination": "Vektor als r·u + s·v schreiben",
-  "Volumenformel": "Prisma V = G·h;  Pyramide V = ⅓·G·h",
-  "Flächeninhalt Dreieck": "A = ½·g·h",
-  "Gleichungssystem lösen": "Einsetzen, Additions- oder Gleichsetzungsverfahren",
-  "Fallunterscheidung beim Parameter": "Gleichung für verschiedene Parameterwerte auf keine, eine oder unendlich viele Lösungen prüfen",
-  "Schnittgerade berechnen": "Gemeinsame Punkte beider Ebenengleichungen bestimmen",
-  "Ableitung bilden": "Potenz-, Summen- und Faktorregel",
-  "Produkt- und Kettenregel": "(u·v)′ = u′v + uv′;  (u(v(x)))′ = u′(v(x))·v′(x)",
-  "Tangentengleichung": "y = f′(x₀)·(x − x₀) + f(x₀)",
-  "Bedingung f′(x)=0": "notwendige Bedingung für Extremstellen; Wendestellen von F liegen bei Extremstellen von f",
-  "Stammfunktion bilden": "∫ xⁿ dx = xⁿ⁺¹/(n+1) + c;  Konstante c aus einem Punkt",
-  "Bestimmtes Integral": "∫ₐᵇ f(x) dx = F(b) − F(a)",
-  "Symmetrieeigenschaft prüfen": "Punktsymmetrie: f(−x) = −f(x);  Achsensymmetrie: f(−x) = f(x)",
-  "Grenzwertbetrachtung": "Verhalten für x → ±∞",
-  "Winkel aus Steigung": "m = tan α",
-  "Vorzeichen der Faktoren": "Produkt positiv, wenn alle Faktoren positiv sind (Monotonie über f′ ≥ 0)",
-  "Flächenvergleich durch Spiegelung": "Der Graph der Umkehrfunktion entsteht durch Spiegelung an y = x",
-  "Steigung am Graphen": "Steigung ablesen und mit Sekanten- und Tangentensteigung argumentieren",
-  "Gleichung lösen": "nach der gesuchten Größe umstellen",
-  "Punkte einsetzen": "Koordinaten in den Funktionsterm einsetzen",
-  "Pfadregel": "Wahrscheinlichkeiten entlang eines Pfades multiplizieren",
-  "Summenregel": "Wahrscheinlichkeiten verschiedener Pfade addieren",
-  "Gegenwahrscheinlichkeit": "P(Ā) = 1 − P(A)",
-  "Bedingte Wahrscheinlichkeit": "P_A(B) = P(A∩B) / P(A)",
-  "Bernoulli-Formel": "P(X=k) = C(n,k)·pᵏ·(1−p)ⁿ⁻ᵏ",
-  "Kumulierte Binomialverteilung": "P(X ≤ k) = Σ P(X=i) für i = 0 … k",
-  "Erwartungswert": "E(X) = n·p  bzw.  Σ xᵢ·P(X=xᵢ);  fair, wenn E(Gewinn) = 0",
-  "Binomialkoeffizient": "C(n,k) = n! / (k!·(n−k)!)",
-  "Symmetrie der Binomialverteilung": "bei p = 0,5: P(X=k) = P(X=n−k)",
-  "Unabhängigkeit": "P(A∩B) = P(A)·P(B)",
-  "Normalverteilung": "Wahrscheinlichkeiten über die Verteilungsfunktion mit μ und σ",
-  "Hypothesentest": "Entscheidungsregel aus Signifikanzniveau; Fehler 2. Art bei wahrem Alternativwert",
-  "Konfidenzintervall": "p̂ ± z·√(p̂(1−p̂)/n)"
-};
+function makeTask(jahr, a, notes, where) {
+  const teil = a && a.teil, niv = a && a.niveau, geb = a && a.gebiet;
+  const nr = a && a.nr !== undefined && a.nr !== null ? String(a.nr) : "";
+  if (!TEIL[teil] || !NIV[niv] || !GEB[geb] || !nr || typeof a.beschreibung !== "string") {
+    notes.push(where + " ist unvollständig oder hat unbekannte Werte und wurde übersprungen.");
+    return null;
+  }
+  const list = x => (Array.isArray(x) ? x.filter(g => typeof g === "string") : []);
+  const themen = list(a.themen), verf = list(a.verfahren);
+  return {
+    jahr, teil, niv, geb, nr, be: Number(a.be) || 0, desc: a.beschreibung,
+    tags: themen.slice(), baseTags: themen.slice(), v: verf.slice(), baseV: verf.slice(),
+    ownTags: new Set(), ownV: new Set(),
+    file: typeof a.datei === "string" ? a.datei.replace(/\.pdf$/i, "") : "",
+    cls: GEB[geb][1], label: niv + " " + GEB[geb][0] + " " + nr, key: jahr + teil + niv + geb + nr
+  };
+}
 
-let FORM = Object.assign({}, FORM0);
+async function loadData() {
+  const last = new Date().getFullYear() + 1;
+  const ys = [];
+  for (let y = FIRST_YEAR; y <= last; y++) ys.push(y);
+  const notes = [];
+  const files = await Promise.all(ys.map(y =>
+    fetch("daten-" + y + ".json", { cache: "no-cache" })
+      .then(r => (r.ok ? r.json().then(j => ({ y, j }), () => { notes.push("daten-" + y + ".json ist keine gültige JSON-Datei."); return null; }) : null))
+      .catch(() => null)));
+  const seen = new Set(), list = [];
+  files.filter(Boolean).forEach(({ y, j }) => {
+    const name = "daten-" + y + ".json";
+    if (!j || !Array.isArray(j.aufgaben)) { notes.push(name + ": Die Liste „aufgaben“ fehlt."); return; }
+    if (j.jahr && Number(j.jahr) !== y) notes.push(name + ": Das Feld „jahr“ (" + j.jahr + ") passt nicht zum Dateinamen, verwendet wird " + y + ".");
+    j.aufgaben.forEach((a, i) => {
+      const t = makeTask(y, a, notes, name + ", Eintrag " + (i + 1));
+      if (!t) return;
+      if (seen.has(t.key)) { notes.push(name + ": " + t.label + " kommt doppelt vor und wurde übersprungen."); return; }
+      seen.add(t.key); list.push(t);
+    });
+  });
+  tasks = list;
+  years = Array.from(new Set(list.map(t => t.jahr))).sort((a, b) => b - a);
+  const fj = await fetch("formeln.json", { cache: "no-cache" }).then(r => (r.ok ? r.json() : null)).catch(() => null);
+  FORM0 = {};
+  if (fj && typeof fj === "object") Object.keys(fj).forEach(n => { if (typeof fj[n] === "string") FORM0[n] = fj[n]; });
+  else if (list.length) notes.push("formeln.json wurde nicht gefunden. Kurzformeln werden dann nicht angezeigt.");
+  FORM = Object.assign({}, FORM0);
+  loaded = true;
+  return notes;
+}
 
-const tasks = D.map(([teil, niv, geb, nr, be, desc, tags]) => {
-  const key = teil + niv + geb + nr;
-  const file = "2025-" + teil + "-" + niv + "-" + geb + "_" + nr.replace(".", "_");
-  return { teil, niv, geb, nr, be, desc, tags, baseTags: tags.slice(), v: (V[key] || []).slice(), baseV: (V[key] || []).slice(),
-    ownTags: new Set(), ownV: new Set(), file, cls: GEB[geb][1],
-    label: niv + " " + GEB[geb][0] + " " + nr, key };
-});
+function showNotes(notes) {
+  const n = $("notice");
+  n.hidden = !notes.length;
+  n.innerHTML = notes.map(x => "<div>" + esc(x) + "</div>").join("");
+}
 
-const state = { teil: new Set(["A"]), niv: new Set(), geb: new Set(), tags: new Set(), verf: new Set(), q: "", all: false, view: "list" };
+const state = { jahr: new Set(), teil: new Set(["A"]), niv: new Set(), geb: new Set(), tags: new Set(), verf: new Set(), q: "", all: false, view: "list" };
 
 const $ = id => document.getElementById(id);
 const esc = s => s.replace(/[&<>"]/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;" }[c]));
@@ -435,7 +343,9 @@ function normCustom(j) {
       const e = src[key] || {};
       const tags = Array.isArray(e.tags) ? e.tags.filter(x => typeof x === "string") : [];
       const v = Array.isArray(e.v) ? e.v.filter(x => typeof x === "string") : [];
-      if (tags.length || v.length) c[kind][key] = { tags, v };
+      const fk = /^\d/.test(key) ? key : "2025" + key;
+      const prev = c[kind][fk] || { tags: [], v: [] };
+      if (tags.length || v.length) c[kind][fk] = { tags: uniq(prev.tags.concat(tags)), v: uniq(prev.v.concat(v)) };
     });
   });
   const f = j.forms || {};
@@ -563,51 +473,45 @@ function editAction(b) {
 function loadCustom() {
   let raw = null;
   try { raw = localStorage.getItem(LS); } catch (e) {}
-  if (raw) {
-    try { custom = normCustom(JSON.parse(raw)); applyCustom(); refresh(); return; } catch (e) {}
-  }
-  try {
-    fetch("anpassungen.json", { cache: "no-store" })
-      .then(r => (r.ok ? r.json() : null))
-      .then(j => { if (j) { custom = normCustom(j); applyCustom(); refresh(); } })
-      .catch(() => {});
-  } catch (e) {}
+  if (!raw) return;
+  try { custom = normCustom(JSON.parse(raw)); applyCustom(); refresh(); } catch (e) {}
 }
 
-$("exp").addEventListener("click", () => {
-  const data = JSON.stringify({ version: 1, add: custom.add, rem: custom.rem, forms: custom.forms }, null, 2);
+function download(name, text) {
   const a = document.createElement("a");
-  a.href = URL.createObjectURL(new Blob([data], { type: "application/json" }));
-  a.download = "anpassungen.json";
+  a.href = URL.createObjectURL(new Blob([text], { type: "application/json" }));
+  a.download = name;
   document.body.appendChild(a); a.click(); a.remove();
   setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+
+/* Jahresdatei mit eingearbeiteten Änderungen, im gleichen Format wie die Dateien im Repository */
+function yearJSON(y) {
+  const rows = tasks.filter(t => t.jahr === y).map(t => JSON.stringify({
+    teil: t.teil, niveau: t.niv, gebiet: t.geb, nr: t.nr, be: t.be, datei: t.file,
+    beschreibung: t.desc, themen: t.tags, verfahren: t.v
+  }));
+  return '{\n  "jahr": ' + y + ',\n  "aufgaben": [\n' + rows.map(r => "    " + r).join(",\n") + "\n  ]\n}\n";
+}
+
+function formelnJSON() {
+  return "{\n" + Object.keys(FORM).map(n => "  " + JSON.stringify(n) + ": " + JSON.stringify(FORM[n])).join(",\n") + "\n}\n";
+}
+
+$("exp-d").addEventListener("click", () => {
+  const y = Number($("exp-year").value);
+  if (y) download("daten-" + y + ".json", yearJSON(y));
 });
-$("impb").addEventListener("click", () => $("imp").click());
-$("imp").addEventListener("change", e => {
-  const f = e.target.files[0];
-  if (!f) return;
-  const rd = new FileReader();
-  rd.onload = () => {
-    try {
-      const c = normCustom(JSON.parse(rd.result));
-      if (confirm("Die Datei ersetzt Ihre bisherigen Anpassungen in diesem Browser. Fortfahren?")) {
-        custom = c; saveCustom(); applyCustom(); refresh();
-      }
-    } catch (err) {
-      alert("Die Datei konnte nicht gelesen werden. Erwartet wird eine anpassungen.json aus diesem Tool.");
-    }
-    e.target.value = "";
-  };
-  rd.readAsText(f);
-});
+$("exp-f").addEventListener("click", () => download("formeln.json", formelnJSON()));
 $("clr").addEventListener("click", () => {
-  if (!confirm("Alle Änderungen in diesem Browser verwerfen? Danach gilt wieder die Datei anpassungen.json aus dem Repository, falls vorhanden.")) return;
+  if (!confirm("Alle Änderungen in diesem Browser verwerfen? Danach gilt wieder genau der Stand der Dateien im Repository.")) return;
   try { localStorage.removeItem(LS); } catch (e) {}
   custom = { add: {}, rem: {}, forms: {} };
-  applyCustom(); refresh(); loadCustom();
+  applyCustom(); refresh();
 });
 
 const baseOk = t =>
+  (!state.jahr.size || state.jahr.has(t.jahr)) &&
   (!state.teil.size || state.teil.has(t.teil)) &&
   (!state.niv.size || state.niv.has(t.niv)) &&
   (!state.geb.size || state.geb.has(t.geb));
@@ -618,7 +522,7 @@ function matches(t) {
   if (!baseOk(t)) return false;
   if (!hit(state.tags, t.tags) || !hit(state.verf, t.v)) return false;
   if (state.q) {
-    const hay = (t.desc + " " + t.tags.join(" ") + " " + t.v.join(" ") + " " + t.v.map(g => FORM[g] || "").join(" ") + " " + t.label + " " + t.file).toLowerCase();
+    const hay = (t.jahr + " " + t.desc + " " + t.tags.join(" ") + " " + t.v.join(" ") + " " + t.v.map(g => FORM[g] || "").join(" ") + " " + t.label + " " + t.file).toLowerCase();
     if (!state.q.toLowerCase().split(/\s+/).filter(Boolean).every(w => hay.includes(w))) return false;
   }
   return true;
@@ -675,6 +579,8 @@ function refresh() {
 }
 
 function buildFilters() {
+  chipGroup($("f-jahr"), years.map(y => [y, String(y)]), state.jahr);
+  $("exp-year").innerHTML = years.map(y => '<option value="' + y + '">' + y + "</option>").join("");
   chipGroup($("f-teil"), Object.entries(TEIL), state.teil);
   chipGroup($("f-niv"), Object.entries(NIV), state.niv);
   chipGroup($("f-geb"), Object.entries(GEB).map(([k, v]) => [k, v[0], v[1]]), state.geb);
@@ -688,11 +594,11 @@ function cardHTML(t) {
   const open = state.editing.has(t.key);
   return '<article class="card ' + t.cls + '">' +
     '<h3>' + esc(GEB[t.geb][0] + " " + t.nr + ", " + t.niv) +
-    '<span class="meta">Teil ' + t.teil + ", " + t.be + " BE</span></h3>" +
+    '<span class="meta">' + t.jahr + ", Teil " + t.teil + ", " + t.be + " BE</span></h3>" +
     "<p>" + esc(t.desc) + "</p>" +
     "<div>" + t.tags.map(g => btn(g, "tags", t.ownTags.has(g))).join("") + "</div>" +
     (t.v.length ? '<div class="vrow"><span class="vl">In der Lösung:</span>' + t.v.map(g => btn(g, "v", t.ownV.has(g))).join("") + "</div>" : "") +
-    '<div class="foot"><span class="file">' + esc(t.file) + '.pdf</span>' +
+    '<div class="foot"><span class="file">' + (t.file ? esc(t.file) + ".pdf" : "") + '</span>' +
     '<button type="button" class="ed-btn ed-open" data-act="toggle" data-key="' + t.key + '" aria-expanded="' + open + '">' + (open ? "Fertig" : "Zuordnung ändern") + "</button></div>" +
     (open ? editorHTML(t) : "") + "</article>";
 }
@@ -706,16 +612,21 @@ function indexHTML(list, dim) {
     if (!topics.length) return;
     html += '<h2 class="gh">' + GEB[geb][0] + "</h2>";
     topics.forEach(g => {
-      const ts = byGeb[geb][g].sort((a, b) => a.teil.localeCompare(b.teil) || a.niv.localeCompare(b.niv) || parseFloat(a.nr) - parseFloat(b.nr));
+      const ts = byGeb[geb][g].sort((a, b) => b.jahr - a.jahr || a.teil.localeCompare(b.teil) || a.niv.localeCompare(b.niv) || parseFloat(a.nr) - parseFloat(b.nr));
       html += '<div class="topic"><h3>' + esc(g) + '<span class="n">' + ts.length + " Aufgaben</span></h3>" +
         (dim === "v" && FORM[g] ? '<p class="formula">' + esc(FORM[g]) + "</p>" : "") +
-        '<div class="ids">' + ts.map(t => '<span class="id" title="' + esc(t.file) + '">' + t.teil + " " + t.niv + " " + t.nr + "</span>").join("") + "</div></div>";
+        '<div class="ids">' + ts.map(t => '<span class="id" title="' + esc(t.file) + '">' + t.teil + " " + t.niv + " " + t.nr + " (" + t.jahr + ")</span>").join("") + "</div></div>";
     });
   });
   return html || '<div class="empty">Für diese Auswahl gibt es hier keine Einträge.</div>';
 }
 
 function render() {
+  if (!tasks.length) {
+    $("count").textContent = "";
+    $("out").innerHTML = '<div class="empty">' + (loaded ? "Es sind keine Aufgaben geladen." : "Aufgaben werden geladen …") + "</div>";
+    return;
+  }
   const list = tasks.filter(matches);
   $("count").textContent = list.length + " von " + tasks.length + " Aufgaben";
   const out = $("out");
@@ -725,7 +636,7 @@ function render() {
   }
   if (state.view === "list") {
     const order = { Ana: 0, Geo: 1, Stoch: 2 };
-    list.sort((a, b) => a.teil.localeCompare(b.teil) || order[a.geb] - order[b.geb] || a.niv.localeCompare(b.niv) || parseFloat(a.nr) - parseFloat(b.nr));
+    list.sort((a, b) => b.jahr - a.jahr || a.teil.localeCompare(b.teil) || order[a.geb] - order[b.geb] || a.niv.localeCompare(b.niv) || parseFloat(a.nr) - parseFloat(b.nr));
     out.innerHTML = '<div class="list">' + list.map(cardHTML).join("") + "</div>";
   } else {
     out.innerHTML = indexHTML(list, state.view === "topic" ? "tags" : "v");
@@ -746,7 +657,7 @@ $("t-verf").addEventListener("click", () => setView("verf"));
 $("q").addEventListener("input", e => { state.q = e.target.value.trim(); render(); });
 $("all").addEventListener("change", e => { state.all = e.target.checked; render(); });
 $("reset").addEventListener("click", () => {
-  state.teil.clear(); state.niv.clear(); state.geb.clear(); state.tags.clear(); state.verf.clear(); state.q = "";
+  state.jahr.clear(); state.teil.clear(); state.niv.clear(); state.geb.clear(); state.tags.clear(); state.verf.clear(); state.q = "";
   state.all = false; $("all").checked = false; $("q").value = "";
   buildFilters(); render();
 });
@@ -769,8 +680,18 @@ $("out").addEventListener("click", e => {
 
 buildFilters();
 render();
-applyCustom();
-loadCustom();
+loadData().then(notes => {
+  if (!tasks.length) {
+    notes.push(location.protocol === "file:"
+      ? "Die Seite wurde direkt als Datei geöffnet, dabei lassen sich die Datendateien nicht laden. Veröffentlichen Sie die Seite (z. B. mit GitHub Pages) oder starten Sie einen lokalen Webserver."
+      : "Es wurden keine Datendateien gefunden. Erwartet werden Dateien wie daten-2025.json im selben Ordner wie die index.html.");
+  }
+  showNotes(notes);
+  buildFilters();
+  render();
+  applyCustom();
+  loadCustom();
+}).catch(() => showNotes(["Die Daten konnten nicht geladen werden."]));
 </script>
 </body>
 </html>
