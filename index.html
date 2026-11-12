@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IQB-Abituraufgaben Mathematik 2025 – Inhalte im Überblick</title>
+<style>
+  :root {
+    --bg: #f2f5f9;
+    --grid: rgba(60, 90, 140, .09);
+    --surface: #ffffff;
+    --ink: #1c2433;
+    --muted: #5b6678;
+    --line: #d5dce7;
+    --ana: #2b5fc7;
+    --geo: #17806d;
+    --sto: #a4571f;
+    --ana-bg: #e6edfb;
+    --geo-bg: #def2ee;
+    --sto-bg: #f8e9dc;
+    --focus: #1c2433;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #141a24;
+      --grid: rgba(150, 180, 230, .07);
+      --surface: #1c2432;
+      --ink: #e6ebf3;
+      --muted: #9aa6ba;
+      --line: #313c50;
+      --ana: #8fb2ff;
+      --geo: #67d1bc;
+      --sto: #f0a770;
+      --ana-bg: #22304f;
+      --geo-bg: #1b3a36;
+      --sto-bg: #3c2c1f;
+      --focus: #e6ebf3;
+      color-scheme: dark;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    color: var(--ink);
+    background-color: var(--bg);
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 28px 16px 64px; }
+  h1 {
+    font: 600 clamp(1.7rem, 4.5vw, 2.6rem)/1.15 "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+    margin: 0 0 8px;
+    letter-spacing: -.01em;
+  }
+  .lead { margin: 0 0 24px; color: var(--muted); max-width: 62ch; }
+
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 14px;
+    margin-bottom: 18px;
+  }
+  .row { display: flex; flex-wrap: wrap; gap: 14px 22px; align-items: flex-start; }
+  .group { min-width: 0; }
+  .group > .gl { font-size: .85rem; color: var(--muted); margin-bottom: 6px; }
+  .seg { display: flex; flex-wrap: wrap; gap: 6px; }
+
+  button, input { font: inherit; color: inherit; }
+  .chip {
+    border: 1px solid var(--line);
+    background: transparent;
+    padding: 5px 12px;
+    border-radius: 999px;
+    cursor: pointer;
+    min-height: 34px;
+  }
+  .chip[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .chip.ana[aria-pressed="true"] { background: var(--ana); border-color: var(--ana); color: #fff; }
+  .chip.geo[aria-pressed="true"] { background: var(--geo); border-color: var(--geo); color: #fff; }
+  .chip.sto[aria-pressed="true"] { background: var(--sto); border-color: var(--sto); color: #fff; }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .chip.ana[aria-pressed="true"],
+    :root:not([data-theme="light"]) .chip.geo[aria-pressed="true"],
+    :root:not([data-theme="light"]) .chip.sto[aria-pressed="true"] { color: #111; }
+  }
+  .chip:focus-visible, input:focus-visible, .tab:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+  .search {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--bg);
+  }
+  .tagbox { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line); }
+  .tagbox .gl { font-size: .85rem; color: var(--muted); margin-bottom: 8px; }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tags .chip { font-size: .88rem; padding: 3px 10px; min-height: 30px; }
+
+  .bar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .count { color: var(--muted); }
+  .tabs { display: flex; gap: 4px; }
+  .tab {
+    border: 1px solid var(--line);
+    background: var(--surface);
+    padding: 6px 14px;
+    cursor: pointer;
+    border-radius: 8px;
+  }
+  .tab[aria-selected="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .reset { background: none; border: none; text-decoration: underline; cursor: pointer; color: var(--muted); padding: 6px; }
+
+  .list { display: grid; gap: 10px; }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-left: 6px solid var(--c);
+    border-radius: 8px;
+    padding: 12px 14px;
+  }
+  .card.ana { --c: var(--ana); --cb: var(--ana-bg); }
+  .card.geo { --c: var(--geo); --cb: var(--geo-bg); }
+  .card.sto { --c: var(--sto); --cb: var(--sto-bg); }
+  .card h3 { margin: 0; font-size: 1.05rem; display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: baseline; }
+  .card h3 .meta { font-weight: 400; color: var(--muted); font-size: .88rem; }
+  .card p { margin: 6px 0 8px; }
+  .card .file { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: .8rem; color: var(--muted); word-break: break-all; }
+  .tag {
+    display: inline-block;
+    background: var(--cb);
+    border: none;
+    border-radius: 6px;
+    padding: 2px 8px;
+    margin: 0 4px 4px 0;
+    font-size: .84rem;
+    cursor: pointer;
+  }
+  .tag.v { background: transparent; box-shadow: inset 0 0 0 1px var(--c); }
+  .vrow { margin-top: 2px; }
+  .vrow .vl { font-size: .84rem; color: var(--muted); margin-right: 6px; }
+  .formula { margin: 0 0 6px; font-family: ui-monospace, Menlo, Consolas, monospace; font-size: .84rem; color: var(--muted); }
+  .opt { display: flex; align-items: center; gap: 8px; margin-top: 12px; font-size: .9rem; color: var(--muted); }
+  .opt input { width: 18px; height: 18px; }
+  .tagbox + .tagbox { margin-top: 12px; }
+  details.panel summary { cursor: pointer; font-weight: 600; }
+  .own-help { color: var(--muted); font-size: .9rem; max-width: 72ch; margin: 10px 0; }
+  .tag.own { border: 1px dashed var(--c); padding: 1px 7px; }
+  .tag.v.own { box-shadow: none; }
+  .foot { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; margin-top: 6px; }
+  .ed-open { background: none; border: 1px solid var(--line); border-radius: 6px; padding: 3px 10px; cursor: pointer; font-size: .85rem; }
+  .editor { margin-top: 10px; padding: 10px 12px; background: var(--bg); border: 1px solid var(--line); border-radius: 8px; }
+  .ed-sec + .ed-sec { margin-top: 12px; }
+  .ed-t { font-weight: 600; font-size: .9rem; margin-bottom: 6px; }
+  .ed-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+  .ed-chip { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 2px 8px; cursor: pointer; font-size: .84rem; }
+  .ed-chip.own { border-style: dashed; border-color: var(--c); }
+  .ed-chip.gone { text-decoration: line-through; color: var(--muted); }
+  .ed-add { display: flex; flex-wrap: wrap; gap: 6px; }
+  .ed-in { flex: 1 1 180px; min-width: 0; padding: 6px 9px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); }
+  .ed-go { padding: 6px 12px; border: 1px solid var(--ink); background: var(--ink); color: var(--bg); border-radius: 6px; cursor: pointer; }
+  .ed-btn:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+  .ed-hint { margin: 8px 0 0; font-size: .84rem; color: var(--muted); }
+  .empty { padding: 28px; text-align: center; color: var(--muted); background: var(--surface); border: 1px dashed var(--line); border-radius: 8px; }
+
+  .topic { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px; }
+  .topic + .topic { margin-top: 8px; }
+  .topic h3 { margin: 0 0 6px; font-size: 1rem; }
+  .topic h3 .n { color: var(--muted); font-weight: 400; font-size: .88rem; margin-left: 6px; }
+  .ids { display: flex; flex-wrap: wrap; gap: 6px; }
+  .id { border: 1px solid var(--line); border-radius: 6px; padding: 1px 8px; font-size: .88rem; background: var(--bg); }
+  .gh { margin: 22px 0 10px; font: 600 1.15rem "Iowan Old Style", Georgia, serif; }
+
+  footer { margin-top: 36px; color: var(--muted); font-size: .85rem; }
+  @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>IQB-Abituraufgaben Mathematik 2025</h1>
+  <p class="lead">Welche Inhalte kommen in welcher Aufgabe vor? Filtern Sie nach Prüfungsteil, Niveau, Sachgebiet, Thema und nach den Verfahren und Formeln, die in den Lösungen vorkommen, zum Beispiel dem Skalarprodukt.</p>
+
+  <section class="panel" aria-label="Filter">
+    <div class="row">
+      <div class="group">
+        <div class="gl">Prüfungsteil</div>
+        <div class="seg" id="f-teil"></div>
+      </div>
+      <div class="group">
+        <div class="gl">Niveau</div>
+        <div class="seg" id="f-niv"></div>
+      </div>
+      <div class="group">
+        <div class="gl">Sachgebiet</div>
+        <div class="seg" id="f-geb"></div>
+      </div>
+    </div>
+    <div style="margin-top:14px">
+      <label class="gl" for="q" style="display:block;font-size:.85rem;color:var(--muted);margin-bottom:6px">Stichwort</label>
+      <input id="q" class="search" type="search" placeholder="z. B. Tangente, Binomialverteilung, Ebene" autocomplete="off">
+    </div>
+    <div class="tagbox">
+      <div class="gl">Thema</div>
+      <div class="tags" id="f-tags"></div>
+    </div>
+    <div class="tagbox">
+      <div class="gl">Verfahren und Formeln in der Lösung (laut Erwartungshorizont)</div>
+      <div class="tags" id="f-verf"></div>
+    </div>
+    <label class="opt"><input type="checkbox" id="all"> Nur Aufgaben anzeigen, in denen alle gewählten Themen und Verfahren vorkommen</label>
+  </section>
+
+  <details class="panel" id="own">
+    <summary>Eigene Anpassungen <span class="count" id="own-count"></span></summary>
+    <p class="own-help">Bei jeder Aufgabe können Sie über „Zuordnung ändern“ Themen und Verfahren hinzufügen oder entfernen und neue Verfahren mit einer Kurzformel anlegen. Gestrichelt umrandet sind Zuordnungen, die Sie selbst ergänzt haben. Ihre Änderungen werden in diesem Browser gespeichert. Um sie zu sichern oder auf anderen Geräten zu nutzen, exportieren Sie die Datei anpassungen.json und legen Sie sie neben die index.html in Ihr Repository. Die Seite lädt sie dort automatisch, solange in diesem Browser keine eigenen Änderungen gespeichert sind.</p>
+    <div class="seg">
+      <button class="chip" id="exp" type="button">Exportieren</button>
+      <button class="chip" id="impb" type="button">Importieren</button>
+      <button class="chip" id="clr" type="button">Änderungen in diesem Browser verwerfen</button>
+    </div>
+    <input type="file" id="imp" accept=".json,application/json" hidden>
+  </details>
+  <datalist id="dl-tags"></datalist>
+  <datalist id="dl-v"></datalist>
+
+  <div class="bar">
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" id="t-list" aria-selected="true">Aufgaben</button>
+      <button class="tab" role="tab" id="t-topic" aria-selected="false">Nach Thema</button>
+      <button class="tab" role="tab" id="t-verf" aria-selected="false">Nach Verfahren</button>
+    </div>
+    <div><span class="count" id="count" aria-live="polite"></span> <button class="reset" id="reset">Filter zurücksetzen</button></div>
+  </div>
+
+  <main id="out"></main>
+
+  <footer>
+    Grundlage sind die Aufgaben und Erwartungshorizonte aus dem Abituraufgabenpool der Länder (Pool 2025, IQB). Die Zuordnung der Themen ist eine eigene Einordnung und kann von der offiziellen Beschreibung abweichen. Teil&nbsp;B ist für die Bearbeitung mit digitalem Hilfsmittel vorgesehen (MMS). Die Verfahren sind den Lösungswegen im Erwartungshorizont entnommen; andere zulässige Lösungswege können weitere Verfahren nutzen.
+  </footer>
+</div>
+
+<script>
+/* Datensatz: [Teil, Niveau, Gebiet, Nr, BE, Beschreibung, [Themen]] */
+const D = [
+// Teil A, Analysis, Gk
+["A","Gk","Ana","1.1",5,"Tangentengleichung rechnerisch bestimmen; zweite, parallele Tangente skizzieren.",["Tangente und Ableitung","Ganzrationale Funktionen"]],
+["A","Gk","Ana","1.2",5,"Stammfunktion durch einen Punkt; Integral über symmetrisches Intervall ohne Rechnung begründen.",["Stammfunktion","Integral und Fläche","Symmetrie","Ganzrationale Funktionen"]],
+["A","Gk","Ana","1.3",5,"Nullstelle einer Exponentialfunktion nachweisen; Flächeninhalt mit den Koordinatenachsen.",["Nullstellen","Integral und Fläche","e-Funktion"]],
+["A","Gk","Ana","2.1",5,"Graph in y-Richtung verschieben; Verschiebung so wählen, dass ein Quadrat flächengleich geteilt wird.",["Graphen verschieben","Integral und Fläche","Ganzrationale Funktionen"]],
+["A","Gk","Ana","2.2",5,"Ableitung angeben; Gleichung lösen und geometrisch deuten (Tangente durch den Ursprung).",["Tangente und Ableitung","Ganzrationale Funktionen"]],
+// Teil A, Analysis, Lk
+["A","Lk","Ana","1.1",5,"Funktionsschar mit e-Funktion: gleiche Steigung im Ursprung, Punktsymmetrie.",["Funktionsscharen","Tangente und Ableitung","Symmetrie","e-Funktion"]],
+["A","Lk","Ana","1.2",5,"Extremstelle zeigen; Graph einer Stammfunktion zuordnen und begründen.",["Extremstellen","Wendestellen","Stammfunktion","Ganzrationale Funktionen"]],
+["A","Lk","Ana","1.3",5,"Integral einer Kosinusfunktion; Parameter a und b aus zwei Punkten bestimmen.",["Trigonometrische Funktionen","Integral und Fläche","Funktionsterm bestimmen"]],
+["A","Lk","Ana","2.1",5,"Produkt f(x)·e^x: Bedingung für waagerechte Tangente nachweisen und am Graphen prüfen.",["Tangente und Ableitung","e-Funktion","Argumentieren am Graphen"]],
+["A","Lk","Ana","2.2",5,"Umkehrfunktion: Aussage über Flächeninhalte zwischen Graph, Umkehrgraph und Winkelhalbierender beurteilen.",["Umkehrfunktion","Integral und Fläche","Argumentieren am Graphen"]],
+["A","Lk","Ana","2.3",5,"Wurzelfunktion: Tangente einzeichnen; Steigungen aller Geraden durch P mit zweitem Schnittpunkt.",["Tangente und Ableitung","Wurzelfunktion","Argumentieren am Graphen"]],
+// Teil A, Geometrie, Gk
+["A","Gk","Geo","1.1",5,"Punkt liegt nicht auf Gerade; Punkt auf der Geraden angeben; Orthogonalität zweier Geraden.",["Geraden","Orthogonalität"]],
+["A","Gk","Geo","1.2",5,"Lage zweier Punkte zur xy-Ebene; Flächeninhalt eines gleichschenkligen Dreiecks.",["Lage im Koordinatensystem","Flächen und Volumen","Länge und Abstand"]],
+["A","Gk","Geo","1.3",5,"Spiegelung eines Punktes an einem Punkt; Punkt in Ebene, Normalenvektor nachweisen.",["Spiegelung","Ebenen","Normalenvektor"]],
+["A","Gk","Geo","2.1",5,"Lineares Gleichungssystem: Lösung nachweisen; ergänzte Gleichung, unendlich viele Lösungen beurteilen. (Inhaltlich identisch mit Gk 2.3.)",["Lineare Gleichungssysteme"]],
+["A","Gk","Geo","2.2",5,"Ebene in Parameterform: Vektor steht senkrecht zur Ebene; Punkt mit vorgegebenem Abstand zum Spiegelpunkt.",["Ebenen","Normalenvektor","Spiegelung","Länge und Abstand"]],
+["A","Gk","Geo","2.3",5,"Lineares Gleichungssystem: Lösung nachweisen; ergänzte Gleichung, unendlich viele Lösungen beurteilen. (Inhaltlich identisch mit Gk 2.1.)",["Lineare Gleichungssysteme"]],
+// Teil A, Geometrie, Lk
+["A","Lk","Geo","1.1",5,"Vektorterme: Vektor, Zahl oder nicht definiert; Werte von r, für die der Winkel mindestens 90° beträgt.",["Skalarprodukt und Winkel","Vektorrechnung"]],
+["A","Lk","Geo","1.2",5,"Würfel: Volumen eines Teilkörpers, Schnittfigur einer Ebene einzeichnen, Schnittgerade zweier Ebenen.",["Körper","Flächen und Volumen","Ebenen","Geraden"]],
+["A","Lk","Geo","2.1",5,"Geradenschar: Ursprung liegt auf keiner Geraden; Aussage, alle Geraden seien identisch, beurteilen.",["Scharen","Geraden"]],
+["A","Lk","Geo","2.2",5,"Ebenenschar: gemeinsam senkrechte Koordinatenebene; zwei verschiedene Ebenen sind nie parallel.",["Scharen","Ebenen","Normalenvektor"]],
+["A","Lk","Geo","2.3",5,"Teil einer Pyramide: Symmetrieebene angeben; Koordinaten eines Eckpunkts über Vektorterm begründen.",["Körper","Lage im Koordinatensystem","Vektorrechnung"]],
+["A","Lk","Geo","2.4",5,"Gleichungssystem mit Parameter: Lösung für a = 0; Parameterwerte für keine bzw. unendlich viele Lösungen.",["Lineare Gleichungssysteme","Scharen"]],
+// Teil A, Stochastik, Gk
+["A","Gk","Stoch","1.1",5,"Onlinespiel: Baumdiagramm erstellen; Ereignis zu einem Term angeben.",["Baumdiagramm","Bedingte Wahrscheinlichkeit","Terme deuten"]],
+["A","Gk","Stoch","1.2",5,"Glücksrad, zweimal gedreht: Term deuten; Wahrscheinlichkeit für ungerade Summe.",["Mehrstufige Zufallsexperimente","Terme deuten"]],
+["A","Gk","Stoch","1.3",5,"Ziehen ohne Zurücklegen (Schwimmgruppe): Wahrscheinlichkeit berechnen; Term deuten.",["Ziehen ohne Zurücklegen","Terme deuten"]],
+["A","Gk","Stoch","2.1",5,"Binomialverteilung mit p = 0,5: Symmetrie der Verteilung nutzen, n ungerade begründen, Wahrscheinlichkeit näherungsweise bestimmen.",["Binomialverteilung","Argumentieren am Graphen"]],
+["A","Gk","Stoch","2.2",5,"Urne ohne Zurücklegen: Wahrscheinlichkeit; Anzahl der Kugeln so bestimmen, dass das Spiel fair ist.",["Ziehen ohne Zurücklegen","Erwartungswert und faires Spiel"]],
+// Teil A, Stochastik, Lk
+["A","Lk","Stoch","1.1",5,"Würfel zweimal geworfen: Gegenwahrscheinlichkeit begründen; Auszahlung für ein faires Spiel.",["Mehrstufige Zufallsexperimente","Erwartungswert und faires Spiel"]],
+["A","Lk","Stoch","1.2",5,"Zwei Binomialverteilungen aus Diagrammen: Aussage beurteilen, Beziehung der Parameter nachweisen.",["Binomialverteilung","Argumentieren am Graphen"]],
+["A","Lk","Stoch","2.1",5,"Binomialverteilung: aus einer Beziehung zwischen P(X=1) und P(X=0) sowie dem Erwartungswert n und p bestimmen.",["Binomialverteilung","Erwartungswert und faires Spiel"]],
+["A","Lk","Stoch","2.2",5,"Würfelprodukt: gleiche Wahrscheinlichkeiten begründen; Term für das Produkt aus n Würfen.",["Mehrstufige Zufallsexperimente","Terme deuten"]],
+["A","Lk","Stoch","2.3",5,"Zwei unabhängige Ereignisse: aus Bedingungen die Wahrscheinlichkeit durch Gleichung bestimmen.",["Stochastische Unabhängigkeit"]],
+// Teil B, Analysis
+["B","Gk","Ana","1",25,"Regenwasser im Auffangbecken (Volumen, Zu- und Abfluss); Wendestelle, Fläche, symmetrisches Trapez in Abhängigkeit von u.",["Änderungsrate und Bestand","Monotonie","Wendestellen","Integral und Fläche","Ganzrationale Funktionen"]],
+["B","Gk","Ana","2",25,"Hotline-Wartezeit mit e-Funktion: Grenzverhalten, Flächenteilung, Extremwerte, mittlere Wartezeit.",["e-Funktion","Grenzverhalten","Wendestellen","Integral und Fläche","Extremstellen","Mittelwert einer Funktion","Änderungsrate und Bestand"]],
+["B","Lk","Ana","1",30,"Funktionsschar mit Nullstellen, Extrempunkt-Abstand, Fläche; Auffangbecken mit Zuflussrate und Pumpe.",["Funktionsscharen","Nullstellen","Extremstellen","Integral und Fläche","Wendestellen","Änderungsrate und Bestand","e-Funktion"]],
+["B","Lk","Ana","2",30,"Schar mit e-Funktion, Wasserrutsche: Grenzverhalten, Extrempunkte, Stammfunktion, Winkel, Wasservolumen, Sichtbarkeit durch Tangenten.",["Funktionsscharen","e-Funktion","Grenzverhalten","Extremstellen","Stammfunktion","Tangente und Ableitung","Integral und Fläche","Monotonie"]],
+// Teil B, Geometrie
+["B","Gk","Geo","1",15,"Partyzelt aus Prisma und Pyramide: Grundfläche, Kantenlängen, Ebene in Koordinatenform, Neigungswinkel, Laserstrahl durch ein Loch.",["Körper","Länge und Abstand","Ebenen","Koordinatenform","Skalarprodukt und Winkel","Geraden"]],
+["B","Gk","Geo","2",15,"Gerades Prisma: Volumen, Ebene in Koordinatenform, Parallelität zu einer Achse, Gerade und Dreieck mit minimalem Flächeninhalt.",["Körper","Flächen und Volumen","Ebenen","Koordinatenform","Geraden","Orthogonalität"]],
+["B","Lk","Geo","1",20,"Pyramide mit Körper über Punktschar: Quadrat prüfen, Volumen, Symmetrieebene, Ebene in Koordinatenform, Winkel maximieren.",["Körper","Flächen und Volumen","Scharen","Ebenen","Koordinatenform","Geraden","Skalarprodukt und Winkel","Lage im Koordinatensystem"]],
+// Teil B, Stochastik
+["B","Gk","Stoch","1",15,"Überbelegte Haushalte: Baumdiagramm, Binomialverteilung mit Erwartungswert und kumulierter Wahrscheinlichkeit, Funktion der bedingten Wahrscheinlichkeit.",["Baumdiagramm","Bedingte Wahrscheinlichkeit","Binomialverteilung","Terme deuten"]],
+["B","Gk","Stoch","2",15,"Brettspiel mit zwei Würfeln: Laplace-Wahrscheinlichkeit, Binomialverteilung, Verteilung skalieren, Kombinatorik der Plättchen.",["Mehrstufige Zufallsexperimente","Binomialverteilung","Kombinatorik","Terme deuten"]],
+["B","Lk","Stoch","1",20,"Naturkostkette: Vierfeldertafel, Binomialverteilung; Normalverteilung mit Bedingungen an Füllmenge und Standardabweichung.",["Vierfeldertafel","Binomialverteilung","Normalverteilung"]],
+["B","Lk","Stoch","2",20,"Naturpark: Binomialverteilung, Baumdiagramm, bedingte Wahrscheinlichkeit, Signifikanztest mit Entscheidungsregel und Fehler zweiter Art.",["Binomialverteilung","Baumdiagramm","Bedingte Wahrscheinlichkeit","Hypothesentest"]],
+["B","Lk","Stoch","3",20,"Naturpark: Binomialverteilung, Baumdiagramm, bedingte Wahrscheinlichkeit, Konfidenzintervall grafisch und rechnerisch.",["Binomialverteilung","Baumdiagramm","Bedingte Wahrscheinlichkeit","Konfidenzintervall"]]
+];
+
+const GEB = { Ana: ["Analysis","ana"], Geo: ["Geometrie","geo"], Stoch: ["Stochastik","sto"] };
+const NIV = { Gk: "grundlegend (Gk)", Lk: "erhöht (Lk)" };
+const TEIL = { A: "Teil A, ohne Hilfsmittel", B: "Teil B, mit Hilfsmittel" };
+
+/* Verfahren und Formeln, die der Erwartungshorizont in der Lösung verwendet. Schlüssel: Teil + Niveau + Gebiet + Nr */
+const V = {
+  "AGkAna1.1": ["Ableitung bilden","Tangentengleichung","Punkte einsetzen"],
+  "AGkAna1.2": ["Stammfunktion bilden","Punkte einsetzen","Symmetrieeigenschaft prüfen","Bestimmtes Integral"],
+  "AGkAna1.3": ["Punkte einsetzen","Stammfunktion bilden","Bestimmtes Integral"],
+  "AGkAna2.1": ["Bestimmtes Integral","Stammfunktion bilden","Gleichung lösen"],
+  "AGkAna2.2": ["Ableitung bilden","Tangentengleichung","Gleichung lösen"],
+  "ALkAna1.1": ["Produkt- und Kettenregel","Ableitung bilden","Symmetrieeigenschaft prüfen"],
+  "ALkAna1.2": ["Ableitung bilden","Bedingung f′(x)=0"],
+  "ALkAna1.3": ["Bestimmtes Integral","Punkte einsetzen","Gleichung lösen"],
+  "ALkAna2.1": ["Produkt- und Kettenregel","Ableitung bilden","Bedingung f′(x)=0"],
+  "ALkAna2.2": ["Bestimmtes Integral","Flächenvergleich durch Spiegelung"],
+  "ALkAna2.3": ["Steigung am Graphen"],
+  "AGkGeo1.1": ["Gleichungssystem lösen","Punktprobe","Skalarprodukt"],
+  "AGkGeo1.2": ["Mittelpunkt bestimmen","Betrag und Länge","Flächeninhalt Dreieck"],
+  "AGkGeo1.3": ["Vektoraddition","Punktprobe","Kollineare Vektoren"],
+  "AGkGeo2.1": ["Punktprobe","Gleichungssystem lösen"],
+  "AGkGeo2.2": ["Skalarprodukt","Betrag und Länge","Vektoraddition"],
+  "AGkGeo2.3": ["Punktprobe","Gleichungssystem lösen"],
+  "ALkGeo1.1": ["Skalarprodukt","Gleichung lösen"],
+  "ALkGeo1.2": ["Volumenformel","Schnittgerade berechnen"],
+  "ALkGeo2.1": ["Punktprobe","Gleichungssystem lösen","Linearkombination"],
+  "ALkGeo2.2": ["Gleichungssystem lösen","Kollineare Vektoren"],
+  "ALkGeo2.3": ["Mittelpunkt bestimmen","Vektoraddition"],
+  "ALkGeo2.4": ["Gleichungssystem lösen","Fallunterscheidung beim Parameter"],
+  "AGkStoch1.1": ["Pfadregel","Summenregel","Gegenwahrscheinlichkeit"],
+  "AGkStoch1.2": ["Pfadregel","Summenregel"],
+  "AGkStoch1.3": ["Pfadregel","Binomialkoeffizient"],
+  "AGkStoch2.1": ["Erwartungswert","Symmetrie der Binomialverteilung"],
+  "AGkStoch2.2": ["Pfadregel","Erwartungswert","Gleichung lösen"],
+  "ALkStoch1.1": ["Pfadregel","Gegenwahrscheinlichkeit","Erwartungswert"],
+  "ALkStoch1.2": ["Erwartungswert"],
+  "ALkStoch2.1": ["Bernoulli-Formel","Erwartungswert","Gleichung lösen"],
+  "ALkStoch2.2": ["Pfadregel","Summenregel"],
+  "ALkStoch2.3": ["Unabhängigkeit","Gleichung lösen"],
+  "BGkAna1": ["Punkte einsetzen","Bestimmtes Integral","Ableitung bilden","Vorzeichen der Faktoren"],
+  "BGkAna2": ["Gleichung lösen","Ableitung bilden","Bestimmtes Integral","Grenzwertbetrachtung"],
+  "BLkAna1": ["Ableitung bilden","Gleichung lösen","Bestimmtes Integral","Betrag und Länge","Vorzeichen der Faktoren"],
+  "BLkAna2": ["Ableitung bilden","Gleichung lösen","Grenzwertbetrachtung","Winkel aus Steigung","Bestimmtes Integral","Tangentengleichung","Vorzeichen der Faktoren"],
+  "BGkGeo1": ["Betrag und Länge","Normalenvektor bestimmen","Skalarprodukt","Koordinatenform aufstellen","Winkel mit Skalarprodukt","Geradengleichung","Punktprobe"],
+  "BGkGeo2": ["Volumenformel","Normalenvektor bestimmen","Skalarprodukt","Koordinatenform aufstellen","Mittelpunkt bestimmen"],
+  "BLkGeo1": ["Betrag und Länge","Volumenformel","Geradengleichung","Normalenvektor bestimmen","Skalarprodukt","Koordinatenform aufstellen","Punktprobe","Mittelpunkt bestimmen"],
+  "BGkStoch1": ["Pfadregel","Summenregel","Bedingte Wahrscheinlichkeit","Erwartungswert","Kumulierte Binomialverteilung","Gleichung lösen"],
+  "BGkStoch2": ["Summenregel","Kumulierte Binomialverteilung","Erwartungswert","Binomialkoeffizient"],
+  "BLkStoch1": ["Summenregel","Kumulierte Binomialverteilung","Normalverteilung","Erwartungswert"],
+  "BLkStoch2": ["Pfadregel","Bedingte Wahrscheinlichkeit","Bernoulli-Formel","Kumulierte Binomialverteilung","Erwartungswert","Hypothesentest"],
+  "BLkStoch3": ["Pfadregel","Bedingte Wahrscheinlichkeit","Kumulierte Binomialverteilung","Erwartungswert","Konfidenzintervall"]
+};
+
+/* Kurzformeln zu den Verfahren */
+const FORM0 = {
+  "Skalarprodukt": "a·b = a₁b₁ + a₂b₂ + a₃b₃;  a·b = 0 ⇔ a und b orthogonal",
+  "Winkel mit Skalarprodukt": "cos φ = (a·b) / (|a|·|b|)",
+  "Betrag und Länge": "|a| = √(a₁² + a₂² + a₃²);  Abstand zweier Punkte = |AB|",
+  "Normalenvektor bestimmen": "n·u = 0 und n·v = 0 für zwei Richtungsvektoren u, v der Ebene",
+  "Koordinatenform aufstellen": "ax₁ + bx₂ + cx₃ = d mit Normalenvektor (a, b, c); d durch Punktprobe",
+  "Geradengleichung": "x = p + t·u (Stützvektor p, Richtungsvektor u)",
+  "Punktprobe": "Koordinaten einsetzen und prüfen, ob die Gleichung stimmt",
+  "Mittelpunkt bestimmen": "M = ½·(A + B)",
+  "Vektoraddition": "Ortsvektor des Zielpunkts = Ortsvektor + Verbindungsvektor",
+  "Kollineare Vektoren": "a = r·b mit einer reellen Zahl r (parallel bzw. Vielfaches)",
+  "Linearkombination": "Vektor als r·u + s·v schreiben",
+  "Volumenformel": "Prisma V = G·h;  Pyramide V = ⅓·G·h",
+  "Flächeninhalt Dreieck": "A = ½·g·h",
+  "Gleichungssystem lösen": "Einsetzen, Additions- oder Gleichsetzungsverfahren",
+  "Fallunterscheidung beim Parameter": "Gleichung für verschiedene Parameterwerte auf keine, eine oder unendlich viele Lösungen prüfen",
+  "Schnittgerade berechnen": "Gemeinsame Punkte beider Ebenengleichungen bestimmen",
+  "Ableitung bilden": "Potenz-, Summen- und Faktorregel",
+  "Produkt- und Kettenregel": "(u·v)′ = u′v + uv′;  (u(v(x)))′ = u′(v(x))·v′(x)",
+  "Tangentengleichung": "y = f′(x₀)·(x − x₀) + f(x₀)",
+  "Bedingung f′(x)=0": "notwendige Bedingung für Extremstellen; Wendestellen von F liegen bei Extremstellen von f",
+  "Stammfunktion bilden": "∫ xⁿ dx = xⁿ⁺¹/(n+1) + c;  Konstante c aus einem Punkt",
+  "Bestimmtes Integral": "∫ₐᵇ f(x) dx = F(b) − F(a)",
+  "Symmetrieeigenschaft prüfen": "Punktsymmetrie: f(−x) = −f(x);  Achsensymmetrie: f(−x) = f(x)",
+  "Grenzwertbetrachtung": "Verhalten für x → ±∞",
+  "Winkel aus Steigung": "m = tan α",
+  "Vorzeichen der Faktoren": "Produkt positiv, wenn alle Faktoren positiv sind (Monotonie über f′ ≥ 0)",
+  "Flächenvergleich durch Spiegelung": "Der Graph der Umkehrfunktion entsteht durch Spiegelung an y = x",
+  "Steigung am Graphen": "Steigung ablesen und mit Sekanten- und Tangentensteigung argumentieren",
+  "Gleichung lösen": "nach der gesuchten Größe umstellen",
+  "Punkte einsetzen": "Koordinaten in den Funktionsterm einsetzen",
+  "Pfadregel": "Wahrscheinlichkeiten entlang eines Pfades multiplizieren",
+  "Summenregel": "Wahrscheinlichkeiten verschiedener Pfade addieren",
+  "Gegenwahrscheinlichkeit": "P(Ā) = 1 − P(A)",
+  "Bedingte Wahrscheinlichkeit": "P_A(B) = P(A∩B) / P(A)",
+  "Bernoulli-Formel": "P(X=k) = C(n,k)·pᵏ·(1−p)ⁿ⁻ᵏ",
+  "Kumulierte Binomialverteilung": "P(X ≤ k) = Σ P(X=i) für i = 0 … k",
+  "Erwartungswert": "E(X) = n·p  bzw.  Σ xᵢ·P(X=xᵢ);  fair, wenn E(Gewinn) = 0",
+  "Binomialkoeffizient": "C(n,k) = n! / (k!·(n−k)!)",
+  "Symmetrie der Binomialverteilung": "bei p = 0,5: P(X=k) = P(X=n−k)",
+  "Unabhängigkeit": "P(A∩B) = P(A)·P(B)",
+  "Normalverteilung": "Wahrscheinlichkeiten über die Verteilungsfunktion mit μ und σ",
+  "Hypothesentest": "Entscheidungsregel aus Signifikanzniveau; Fehler 2. Art bei wahrem Alternativwert",
+  "Konfidenzintervall": "p̂ ± z·√(p̂(1−p̂)/n)"
+};
+
+let FORM = Object.assign({}, FORM0);
+
+const tasks = D.map(([teil, niv, geb, nr, be, desc, tags]) => {
+  const key = teil + niv + geb + nr;
+  const file = "2025-" + teil + "-" + niv + "-" + geb + "_" + nr.replace(".", "_");
+  return { teil, niv, geb, nr, be, desc, tags, baseTags: tags.slice(), v: (V[key] || []).slice(), baseV: (V[key] || []).slice(),
+    ownTags: new Set(), ownV: new Set(), file, cls: GEB[geb][1],
+    label: niv + " " + GEB[geb][0] + " " + nr, key };
+});
+
+const state = { teil: new Set(["A"]), niv: new Set(), geb: new Set(), tags: new Set(), verf: new Set(), q: "", all: false, view: "list" };
+
+const $ = id => document.getElementById(id);
+const esc = s => s.replace(/[&<>"]/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;" }[c]));
+
+/* Eigene Anpassungen: werden im Browser gespeichert und lassen sich als anpassungen.json exportieren */
+const LS = "iqb-anpassungen-v1";
+let custom = { add: {}, rem: {}, forms: {} };
+let pendingFocus = null;
+state.editing = new Set();
+
+const uniq = a => Array.from(new Set(a));
+
+function normCustom(j) {
+  const c = { add: {}, rem: {}, forms: {} };
+  if (!j || typeof j !== "object") return c;
+  ["add", "rem"].forEach(kind => {
+    const src = j[kind] || {};
+    Object.keys(src).forEach(key => {
+      const e = src[key] || {};
+      const tags = Array.isArray(e.tags) ? e.tags.filter(x => typeof x === "string") : [];
+      const v = Array.isArray(e.v) ? e.v.filter(x => typeof x === "string") : [];
+      if (tags.length || v.length) c[kind][key] = { tags, v };
+    });
+  });
+  const f = j.forms || {};
+  Object.keys(f).forEach(n => { if (typeof f[n] === "string" && f[n].trim()) c.forms[n] = f[n].trim(); });
+  return c;
+}
+
+function slot(kind, key) { return custom[kind][key] || (custom[kind][key] = { tags: [], v: [] }); }
+
+function cleanup() {
+  ["add", "rem"].forEach(kind => Object.keys(custom[kind]).forEach(key => {
+    const e = custom[kind][key];
+    if (!e.tags.length && !e.v.length) delete custom[kind][key];
+  }));
+}
+
+function saveCustom() { try { localStorage.setItem(LS, JSON.stringify(custom)); } catch (e) {} }
+
+function names(dim) {
+  return uniq(tasks.flatMap(t => dim === "v" ? t.v.concat(t.baseV) : t.tags.concat(t.baseTags)))
+    .sort((a, b) => a.localeCompare(b, "de"));
+}
+
+function fillDatalists() {
+  ["tags", "v"].forEach(dim => {
+    $("dl-" + dim).innerHTML = names(dim).map(n => '<option value="' + esc(n) + '">').join("");
+  });
+}
+
+function applyCustom() {
+  FORM = Object.assign({}, FORM0, custom.forms);
+  tasks.forEach(t => {
+    const a = custom.add[t.key] || {}, r = custom.rem[t.key] || {};
+    t.tags = uniq(t.baseTags.filter(x => !(r.tags || []).includes(x)).concat(a.tags || []));
+    t.v = uniq(t.baseV.filter(x => !(r.v || []).includes(x)).concat(a.v || []));
+    t.ownTags = new Set(a.tags || []);
+    t.ownV = new Set(a.v || []);
+  });
+  fillDatalists();
+  const changed = new Set(Object.keys(custom.add).concat(Object.keys(custom.rem))).size;
+  const nf = Object.keys(custom.forms).length;
+  $("own-count").textContent = (changed || nf)
+    ? "(" + changed + " Aufgaben angepasst" + (nf ? ", " + nf + " eigene Formeln" : "") + ")" : "";
+}
+
+function canonical(dim, name) {
+  const n = name.trim().replace(/\s+/g, " ");
+  const hit = names(dim).find(x => x.toLowerCase() === n.toLowerCase());
+  return hit || n;
+}
+
+function taskByKey(key) { return tasks.find(t => t.key === key); }
+
+function addItem(key, dim, name, formula) {
+  const t = taskByKey(key);
+  const n = canonical(dim, name);
+  if (!t || !n) return;
+  const base = dim === "v" ? t.baseV : t.baseTags;
+  const r = slot("rem", key)[dim], a = slot("add", key)[dim];
+  const ri = r.indexOf(n);
+  if (ri >= 0) r.splice(ri, 1);
+  else if (!base.includes(n) && !a.includes(n)) a.push(n);
+  if (dim === "v" && formula && formula.trim()) custom.forms[n] = formula.trim();
+  cleanup(); saveCustom(); applyCustom(); refresh();
+}
+
+function removeItem(key, dim, name) {
+  const t = taskByKey(key);
+  if (!t) return;
+  const base = dim === "v" ? t.baseV : t.baseTags;
+  const r = slot("rem", key)[dim], a = slot("add", key)[dim];
+  const ai = a.indexOf(name);
+  if (ai >= 0) a.splice(ai, 1);
+  else if (base.includes(name) && !r.includes(name)) r.push(name);
+  cleanup(); saveCustom(); applyCustom(); refresh();
+}
+
+function restoreItem(key, dim, name) {
+  const r = slot("rem", key)[dim];
+  const i = r.indexOf(name);
+  if (i >= 0) r.splice(i, 1);
+  cleanup(); saveCustom(); applyCustom(); refresh();
+}
+
+function editorHTML(t) {
+  const sec = (dim, title, ph) => {
+    const cur = dim === "v" ? t.v : t.tags;
+    const own = dim === "v" ? t.ownV : t.ownTags;
+    const gone = ((custom.rem[t.key] || {})[dim]) || [];
+    const at = (act, g) => ' data-act="' + act + '" data-key="' + t.key + '" data-dim="' + dim + '" data-tag="' + esc(g) + '"';
+    const chips =
+      cur.map(g => '<button type="button" class="ed-btn ed-chip' + (own.has(g) ? " own" : "") + '"' + at("rem", g) + ' title="Entfernen">' + esc(g) + " ×</button>").join("") +
+      gone.map(g => '<button type="button" class="ed-btn ed-chip gone"' + at("restore", g) + ' title="Wiederherstellen">' + esc(g) + " (zurückholen)</button>").join("");
+    return '<div class="ed-sec"><div class="ed-t">' + title + "</div>" +
+      '<div class="ed-chips">' + (chips || '<span class="ed-hint">Noch nichts zugeordnet.</span>') + "</div>" +
+      '<div class="ed-add"><input class="ed-in" list="dl-' + dim + '" data-key="' + t.key + '" data-dim="' + dim + '" placeholder="' + ph + '" aria-label="' + title + ' hinzufügen">' +
+      (dim === "v" ? '<input class="ed-in ed-f" placeholder="Kurzformel (optional)" aria-label="Kurzformel">' : "") +
+      '<button type="button" class="ed-btn ed-go" data-act="add" data-key="' + t.key + '" data-dim="' + dim + '">Hinzufügen</button></div></div>';
+  };
+  return '<div class="editor">' +
+    sec("tags", "Themen", "Thema wählen oder neu eingeben") +
+    sec("v", "Verfahren und Formeln in der Lösung", "Verfahren wählen oder neu eingeben") +
+    '<p class="ed-hint">Ein neuer Name legt ein neues Thema bzw. Verfahren an. Die Kurzformel gilt für das Verfahren in allen Aufgaben. Entfernte Zuordnungen lassen sich zurückholen.</p></div>';
+}
+
+function editAction(b) {
+  const key = b.dataset.key, dim = b.dataset.dim, act = b.dataset.act, tag = b.dataset.tag;
+  if (act === "toggle") {
+    state.editing.has(key) ? state.editing.delete(key) : state.editing.add(key);
+    render();
+  } else if (act === "rem") {
+    removeItem(key, dim, tag);
+  } else if (act === "restore") {
+    restoreItem(key, dim, tag);
+  } else if (act === "add") {
+    const box = b.closest(".ed-add");
+    const name = box.querySelector(".ed-in:not(.ed-f)").value;
+    const f = box.querySelector(".ed-f");
+    if (!name.trim()) return;
+    pendingFocus = { key, dim };
+    addItem(key, dim, name, f ? f.value : "");
+  }
+}
+
+function loadCustom() {
+  let raw = null;
+  try { raw = localStorage.getItem(LS); } catch (e) {}
+  if (raw) {
+    try { custom = normCustom(JSON.parse(raw)); applyCustom(); refresh(); return; } catch (e) {}
+  }
+  try {
+    fetch("anpassungen.json", { cache: "no-store" })
+      .then(r => (r.ok ? r.json() : null))
+      .then(j => { if (j) { custom = normCustom(j); applyCustom(); refresh(); } })
+      .catch(() => {});
+  } catch (e) {}
+}
+
+$("exp").addEventListener("click", () => {
+  const data = JSON.stringify({ version: 1, add: custom.add, rem: custom.rem, forms: custom.forms }, null, 2);
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([data], { type: "application/json" }));
+  a.download = "anpassungen.json";
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+});
+$("impb").addEventListener("click", () => $("imp").click());
+$("imp").addEventListener("change", e => {
+  const f = e.target.files[0];
+  if (!f) return;
+  const rd = new FileReader();
+  rd.onload = () => {
+    try {
+      const c = normCustom(JSON.parse(rd.result));
+      if (confirm("Die Datei ersetzt Ihre bisherigen Anpassungen in diesem Browser. Fortfahren?")) {
+        custom = c; saveCustom(); applyCustom(); refresh();
+      }
+    } catch (err) {
+      alert("Die Datei konnte nicht gelesen werden. Erwartet wird eine anpassungen.json aus diesem Tool.");
+    }
+    e.target.value = "";
+  };
+  rd.readAsText(f);
+});
+$("clr").addEventListener("click", () => {
+  if (!confirm("Alle Änderungen in diesem Browser verwerfen? Danach gilt wieder die Datei anpassungen.json aus dem Repository, falls vorhanden.")) return;
+  try { localStorage.removeItem(LS); } catch (e) {}
+  custom = { add: {}, rem: {}, forms: {} };
+  applyCustom(); refresh(); loadCustom();
+});
+
+const baseOk = t =>
+  (!state.teil.size || state.teil.has(t.teil)) &&
+  (!state.niv.size || state.niv.has(t.niv)) &&
+  (!state.geb.size || state.geb.has(t.geb));
+
+const hit = (sel, arr) => !sel.size || (state.all ? [...sel].every(x => arr.includes(x)) : arr.some(x => sel.has(x)));
+
+function matches(t) {
+  if (!baseOk(t)) return false;
+  if (!hit(state.tags, t.tags) || !hit(state.verf, t.v)) return false;
+  if (state.q) {
+    const hay = (t.desc + " " + t.tags.join(" ") + " " + t.v.join(" ") + " " + t.v.map(g => FORM[g] || "").join(" ") + " " + t.label + " " + t.file).toLowerCase();
+    if (!state.q.toLowerCase().split(/\s+/).filter(Boolean).every(w => hay.includes(w))) return false;
+  }
+  return true;
+}
+
+function chipGroup(host, items, set) {
+  host.innerHTML = "";
+  items.forEach(([val, text, c]) => {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "chip " + (c || "");
+    b.textContent = text;
+    b.setAttribute("aria-pressed", set.has(val));
+    b.addEventListener("click", () => {
+      set.has(val) ? set.delete(val) : set.add(val);
+      b.setAttribute("aria-pressed", set.has(val));
+      refresh();
+    });
+    host.appendChild(b);
+  });
+}
+
+/* Themen- und Verfahrens-Chips: nur solche, die in den aktuell gewählten Teilen, Niveaus und Gebieten vorkommen */
+function fillChips(host, dim, set) {
+  host.innerHTML = "";
+  const counts = {};
+  tasks.filter(baseOk).forEach(t => t[dim].forEach(g => { counts[g] = (counts[g] || 0) + 1; }));
+  [...set].forEach(g => { if (!counts[g]) set.delete(g); });
+  Object.keys(counts).sort((a, b) => a.localeCompare(b, "de")).forEach(g => {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "chip";
+    b.textContent = g + " (" + counts[g] + ")";
+    if (dim === "v" && FORM[g]) b.title = FORM[g];
+    b.setAttribute("aria-pressed", set.has(g));
+    b.addEventListener("click", () => {
+      set.has(g) ? set.delete(g) : set.add(g);
+      b.setAttribute("aria-pressed", set.has(g));
+      render();
+    });
+    host.appendChild(b);
+  });
+}
+
+function refresh() {
+  fillChips($("f-tags"), "tags", state.tags);
+  fillChips($("f-verf"), "v", state.verf);
+  render();
+  if (pendingFocus) {
+    const el = document.querySelector('.ed-in:not(.ed-f)[data-key="' + pendingFocus.key + '"][data-dim="' + pendingFocus.dim + '"]');
+    if (el) el.focus();
+    pendingFocus = null;
+  }
+}
+
+function buildFilters() {
+  chipGroup($("f-teil"), Object.entries(TEIL), state.teil);
+  chipGroup($("f-niv"), Object.entries(NIV), state.niv);
+  chipGroup($("f-geb"), Object.entries(GEB).map(([k, v]) => [k, v[0], v[1]]), state.geb);
+  fillChips($("f-tags"), "tags", state.tags);
+  fillChips($("f-verf"), "v", state.verf);
+}
+
+function cardHTML(t) {
+  const btn = (g, dim, own) => '<button class="tag' + (dim === "v" ? " v" : "") + (own ? " own" : "") + '" type="button" data-dim="' + dim + '" data-tag="' + esc(g) + '"' +
+    (dim === "v" && FORM[g] ? ' title="' + esc(FORM[g]) + '"' : "") + ">" + esc(g) + "</button>";
+  const open = state.editing.has(t.key);
+  return '<article class="card ' + t.cls + '">' +
+    '<h3>' + esc(GEB[t.geb][0] + " " + t.nr + ", " + t.niv) +
+    '<span class="meta">Teil ' + t.teil + ", " + t.be + " BE</span></h3>" +
+    "<p>" + esc(t.desc) + "</p>" +
+    "<div>" + t.tags.map(g => btn(g, "tags", t.ownTags.has(g))).join("") + "</div>" +
+    (t.v.length ? '<div class="vrow"><span class="vl">In der Lösung:</span>' + t.v.map(g => btn(g, "v", t.ownV.has(g))).join("") + "</div>" : "") +
+    '<div class="foot"><span class="file">' + esc(t.file) + '.pdf</span>' +
+    '<button type="button" class="ed-btn ed-open" data-act="toggle" data-key="' + t.key + '" aria-expanded="' + open + '">' + (open ? "Fertig" : "Zuordnung ändern") + "</button></div>" +
+    (open ? editorHTML(t) : "") + "</article>";
+}
+
+function indexHTML(list, dim) {
+  const byGeb = { Ana: {}, Geo: {}, Stoch: {} };
+  list.forEach(t => t[dim].forEach(g => { (byGeb[t.geb][g] = byGeb[t.geb][g] || []).push(t); }));
+  let html = "";
+  Object.keys(byGeb).forEach(geb => {
+    const topics = Object.keys(byGeb[geb]).sort((a, b) => byGeb[geb][b].length - byGeb[geb][a].length || a.localeCompare(b, "de"));
+    if (!topics.length) return;
+    html += '<h2 class="gh">' + GEB[geb][0] + "</h2>";
+    topics.forEach(g => {
+      const ts = byGeb[geb][g].sort((a, b) => a.teil.localeCompare(b.teil) || a.niv.localeCompare(b.niv) || parseFloat(a.nr) - parseFloat(b.nr));
+      html += '<div class="topic"><h3>' + esc(g) + '<span class="n">' + ts.length + " Aufgaben</span></h3>" +
+        (dim === "v" && FORM[g] ? '<p class="formula">' + esc(FORM[g]) + "</p>" : "") +
+        '<div class="ids">' + ts.map(t => '<span class="id" title="' + esc(t.file) + '">' + t.teil + " " + t.niv + " " + t.nr + "</span>").join("") + "</div></div>";
+    });
+  });
+  return html || '<div class="empty">Für diese Auswahl gibt es hier keine Einträge.</div>';
+}
+
+function render() {
+  const list = tasks.filter(matches);
+  $("count").textContent = list.length + " von " + tasks.length + " Aufgaben";
+  const out = $("out");
+  if (!list.length) {
+    out.innerHTML = '<div class="empty">Keine Aufgabe passt zu diesen Filtern. Lockern Sie einen Filter oder setzen Sie alle zurück.</div>';
+    return;
+  }
+  if (state.view === "list") {
+    const order = { Ana: 0, Geo: 1, Stoch: 2 };
+    list.sort((a, b) => a.teil.localeCompare(b.teil) || order[a.geb] - order[b.geb] || a.niv.localeCompare(b.niv) || parseFloat(a.nr) - parseFloat(b.nr));
+    out.innerHTML = '<div class="list">' + list.map(cardHTML).join("") + "</div>";
+  } else {
+    out.innerHTML = indexHTML(list, state.view === "topic" ? "tags" : "v");
+  }
+}
+
+function setView(v) {
+  state.view = v;
+  $("t-list").setAttribute("aria-selected", v === "list");
+  $("t-topic").setAttribute("aria-selected", v === "topic");
+  $("t-verf").setAttribute("aria-selected", v === "verf");
+  render();
+}
+
+$("t-list").addEventListener("click", () => setView("list"));
+$("t-topic").addEventListener("click", () => setView("topic"));
+$("t-verf").addEventListener("click", () => setView("verf"));
+$("q").addEventListener("input", e => { state.q = e.target.value.trim(); render(); });
+$("all").addEventListener("change", e => { state.all = e.target.checked; render(); });
+$("reset").addEventListener("click", () => {
+  state.teil.clear(); state.niv.clear(); state.geb.clear(); state.tags.clear(); state.verf.clear(); state.q = "";
+  state.all = false; $("all").checked = false; $("q").value = "";
+  buildFilters(); render();
+});
+$("out").addEventListener("keydown", e => {
+  if (e.key === "Enter" && e.target.classList && e.target.classList.contains("ed-in")) {
+    e.preventDefault();
+    const btn = e.target.closest(".ed-add").querySelector('[data-act="add"]');
+    if (btn) editAction(btn);
+  }
+});
+$("out").addEventListener("click", e => {
+  const eb = e.target.closest(".ed-btn");
+  if (eb) { editAction(eb); return; }
+  const b = e.target.closest(".tag");
+  if (!b) return;
+  (b.dataset.dim === "v" ? state.verf : state.tags).add(b.dataset.tag);
+  refresh();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+buildFilters();
+render();
+applyCustom();
+loadCustom();
+</script>
+</body>
+</html>
