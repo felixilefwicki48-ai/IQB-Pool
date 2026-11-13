@@ -1,5 +1,6 @@
 {
   "Ableitung bilden": "Potenz-, Summen- und Faktorregel",
+  "Ähnlichkeit von Dreiecken": "Dreiecke mit zwei gleich großen Winkeln sind ähnlich; ihre Seitenverhältnisse stimmen überein (Streckenverhältnisse über die Ähnlichkeit bestimmen)",
   "Anordnungen (Fakultät)": "n verschiedene Objekte lassen sich auf n! = n·(n−1)·…·1 Arten anordnen",
   "Bedingte Wahrscheinlichkeit": "P_A(B) = P(A∩B) / P(A)",
   "Bedingung f′(x)=0": "notwendige Bedingung für Extremstellen; Wendestellen von F liegen bei Extremstellen von f",
@@ -14,6 +15,7 @@
   "Fallunterscheidung beim Parameter": "Gleichung für verschiedene Parameterwerte auf keine, eine oder unendlich viele Lösungen prüfen",
   "Flächeninhalt Dreieck": "A = ½·g·h",
   "Flächeninhalt Quadrat (Diagonale)": "A = ½·d²",
+  "Flächeninhalt Raute": "A = ½·e·f (e, f Längen der Diagonalen)",
   "Flächeninhalt Rechteck": "A = a·b",
   "Flächeninhalt Trapez": "A = ½·(a + c)·h",
   "Flächenvergleich durch Spiegelung": "Der Graph der Umkehrfunktion entsteht durch Spiegelung an y = x",
