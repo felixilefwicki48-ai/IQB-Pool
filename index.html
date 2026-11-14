@@ -148,6 +148,24 @@
   .opt { display: flex; align-items: center; gap: 8px; margin-top: 12px; font-size: .9rem; color: var(--muted); }
   .opt input { width: 18px; height: 18px; }
   .tagbox + .tagbox { margin-top: 12px; }
+  .search.main { font-size: 1.05rem; padding: 12px 14px; }
+  .sugg, .active { display: flex; flex-wrap: wrap; gap: 6px; }
+  .sugg:not(:empty) { margin-top: 8px; }
+  .active:not(:empty) { margin-top: 12px; }
+  .sug, .act {
+    border: 1px solid var(--line); background: var(--bg); border-radius: 999px;
+    padding: 3px 10px; min-height: 30px; cursor: pointer; font-size: .88rem;
+  }
+  .sug small { color: var(--muted); margin-left: 6px; }
+  .act { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .sug:focus-visible, .act:focus-visible, details.fold > summary:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+  details.fold { margin-top: 12px; padding-top: 8px; border-top: 1px solid var(--line); }
+  details.fold > summary { cursor: pointer; font-weight: 600; min-height: 34px; display: flex; align-items: center; gap: 8px; list-style: none; }
+  details.fold > summary::-webkit-details-marker { display: none; }
+  details.fold > summary::before { content: "▸"; color: var(--muted); width: 1em; }
+  details.fold[open] > summary::before { content: "▾"; }
+  details.fold .sub { font-weight: 400; color: var(--muted); font-size: .85rem; }
+  details.fold .tags { margin-top: 8px; max-height: 280px; overflow-y: auto; }
   details.panel summary { cursor: pointer; font-weight: 600; }
   .own-help { color: var(--muted); font-size: .9rem; max-width: 72ch; margin: 10px 0; }
   .tag.own { border: 1px dashed var(--c); padding: 1px 7px; }
@@ -190,6 +208,13 @@
   <div class="notice" id="notice" role="status" hidden></div>
 
   <section class="panel" aria-label="Filter">
+    <div>
+      <label class="gl" for="q" style="display:block;font-size:.85rem;color:var(--muted);margin-bottom:6px">Stichwort</label>
+      <input id="q" class="search main" type="search" placeholder="z. B. Tangente, Skalarprodukt, Binomialverteilung" autocomplete="off">
+      <div class="sugg" id="sugg" aria-label="Passende Themen und Verfahren" aria-live="polite"></div>
+    </div>
+    <div class="active" id="active" aria-label="Gewählte Themen und Verfahren"></div>
+    <div style="margin-top:14px">
     <div class="row">
       <div class="group">
         <div class="gl">Jahr</div>
@@ -208,18 +233,15 @@
         <div class="seg" id="f-geb"></div>
       </div>
     </div>
-    <div style="margin-top:14px">
-      <label class="gl" for="q" style="display:block;font-size:.85rem;color:var(--muted);margin-bottom:6px">Stichwort</label>
-      <input id="q" class="search" type="search" placeholder="z. B. Tangente, Binomialverteilung, Ebene" autocomplete="off">
     </div>
-    <div class="tagbox">
-      <div class="gl">Thema</div>
+    <details class="fold" id="d-tags">
+      <summary>Themen <span class="sub" id="s-tags"></span></summary>
       <div class="tags" id="f-tags"></div>
-    </div>
-    <div class="tagbox">
-      <div class="gl">Verfahren und Formeln in der Lösung (laut Erwartungshorizont)</div>
+    </details>
+    <details class="fold" id="d-verf">
+      <summary>Verfahren und Formeln in der Lösung <span class="sub" id="s-verf"></span></summary>
       <div class="tags" id="f-verf"></div>
-    </div>
+    </details>
     <label class="opt"><input type="checkbox" id="all"> Nur Aufgaben anzeigen, in denen alle gewählten Themen und Verfahren vorkommen</label>
   </section>
 
@@ -561,7 +583,58 @@ function fillChips(host, dim, set) {
     b.addEventListener("click", () => {
       set.has(g) ? set.delete(g) : set.add(g);
       b.setAttribute("aria-pressed", set.has(g));
+      syncMeta();
       render();
+    });
+    host.appendChild(b);
+  });
+  avail[dim] = counts;
+}
+
+/* Stichwortvorschläge, gewählte Filter und Zähler an den Ausklappmenüs */
+const avail = { tags: {}, v: {} };
+const DIMS = [["tags", "Thema", () => state.tags, "s-tags"], ["v", "Verfahren", () => state.verf, "s-verf"]];
+
+function syncMeta() {
+  DIMS.forEach(([dim, , get, sid]) => {
+    const n = Object.keys(avail[dim]).length, k = get().size;
+    $(sid).textContent = "(" + n + " zur Auswahl" + (k ? ", " + k + " gewählt" : "") + ")";
+  });
+  const act = $("active");
+  act.innerHTML = "";
+  DIMS.forEach(([dim, label, get]) => {
+    [...get()].forEach(g => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "act";
+      b.textContent = label + ": " + g + " ×";
+      b.setAttribute("aria-label", label + " " + g + " entfernen");
+      b.addEventListener("click", () => { get().delete(g); refresh(); });
+      act.appendChild(b);
+    });
+  });
+  const host = $("sugg");
+  host.innerHTML = "";
+  const w = state.q.toLowerCase().split(/\s+/).filter(Boolean);
+  if (!w.length) return;
+  const found = [];
+  DIMS.forEach(([dim, label, get]) => {
+    Object.keys(avail[dim]).forEach(g => {
+      const lg = g.toLowerCase();
+      if (!get().has(g) && w.every(x => lg.includes(x))) found.push({ dim, label, g, n: avail[dim][g], start: lg.startsWith(w[0]) ? 0 : 1 });
+    });
+  });
+  found.sort((a, b) => a.start - b.start || b.n - a.n || a.g.localeCompare(b.g, "de"));
+  found.slice(0, 10).forEach(f => {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "sug";
+    b.innerHTML = esc(f.g) + "<small>" + f.label + ", " + f.n + "</small>";
+    if (f.dim === "v" && FORM[f.g]) b.title = FORM[f.g];
+    b.addEventListener("click", () => {
+      (f.dim === "v" ? state.verf : state.tags).add(f.g);
+      state.q = ""; $("q").value = "";
+      refresh();
     });
     host.appendChild(b);
   });
@@ -570,6 +643,7 @@ function fillChips(host, dim, set) {
 function refresh() {
   fillChips($("f-tags"), "tags", state.tags);
   fillChips($("f-verf"), "v", state.verf);
+  syncMeta();
   render();
   if (pendingFocus) {
     const el = document.querySelector('.ed-in:not(.ed-f)[data-key="' + pendingFocus.key + '"][data-dim="' + pendingFocus.dim + '"]');
@@ -586,6 +660,7 @@ function buildFilters() {
   chipGroup($("f-geb"), Object.entries(GEB).map(([k, v]) => [k, v[0], v[1]]), state.geb);
   fillChips($("f-tags"), "tags", state.tags);
   fillChips($("f-verf"), "v", state.verf);
+  syncMeta();
 }
 
 function cardHTML(t) {
@@ -654,7 +729,7 @@ function setView(v) {
 $("t-list").addEventListener("click", () => setView("list"));
 $("t-topic").addEventListener("click", () => setView("topic"));
 $("t-verf").addEventListener("click", () => setView("verf"));
-$("q").addEventListener("input", e => { state.q = e.target.value.trim(); render(); });
+$("q").addEventListener("input", e => { state.q = e.target.value.trim(); syncMeta(); render(); });
 $("all").addEventListener("change", e => { state.all = e.target.checked; render(); });
 $("reset").addEventListener("click", () => {
   state.jahr.clear(); state.teil.clear(); state.niv.clear(); state.geb.clear(); state.tags.clear(); state.verf.clear(); state.q = "";
